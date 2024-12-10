@@ -1,5 +1,0 @@
-/home/hasegawa/デスクトップ/fishc-fish-cpp-interpreter/build/CMakeFiles/rebuild_cache.dir
-/home/hasegawa/デスクトップ/fishc-fish-cpp-interpreter/build/CMakeFiles/edit_cache.dir
-/home/hasegawa/デスクトップ/fishc-fish-cpp-interpreter/build/src/CMakeFiles/rebuild_cache.dir
-/home/hasegawa/デスクトップ/fishc-fish-cpp-interpreter/build/src/CMakeFiles/edit_cache.dir
-/home/hasegawa/デスクトップ/fishc-fish-cpp-interpreter/build/src/CMakeFiles/fishc.dir
