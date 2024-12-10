@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/fishc.dir/main.cpp.o  -o fishc 
