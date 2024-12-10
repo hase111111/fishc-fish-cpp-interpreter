@@ -1,6 +1,9 @@
 
-cmake_minimum_required(VERSION 3.13)
+# Automatically find all .cpp files in the current directory
+file(GLOB SOURCES "*.cpp")
 
-project(fishc CXX)
+# Add the executable
+add_executable(fishc ${SOURCES})
 
-add_executable(fishc main.cpp)
+# Include the include directory
+target_include_directories(fishc PRIVATE ${PROJECT_SOURCE_DIR}/include)
