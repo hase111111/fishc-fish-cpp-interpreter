@@ -32,4 +32,4 @@
 *.app
 
 # Debug files
-/build
+build/
