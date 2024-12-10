@@ -1,10 +1,12 @@
 
 #include <iostream>
 
+#include "help_printer.h"
+
 int main(int argc, char *argv[]) {
     if (argc < 2) {
         // Print usage
-        std::cout << "Usage: " << argv[0] << " <input_file>" << std::endl;
+        fishc::HelpPrinter::PrintHelp();
     } else {
         // Read input file
         std::string input_file = argv[1];
