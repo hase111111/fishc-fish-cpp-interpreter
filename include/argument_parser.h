@@ -1,14 +1,14 @@
 
-#ifndef FISHC_OPTION_LOADER_H_
-#define FISHC_OPTION_LOADER_H_
+#ifndef FISHC_ARGUMENT_PARSER_H_
+#define FISHC_ARGUMENT_PARSER_H_
 
 #include <string>
 
 namespace fishc {
 
-class OptionLoader final {
+class ArgumentParser final {
   public:
-    OptionLoader() = default;
+    ArgumentParser() = default;
 
     void Load(int argc, char *argv[]);
     constexpr int GetOptionNum() const { return option_num_; }
@@ -19,4 +19,4 @@ class OptionLoader final {
 
 };  // namespace fishc
 
-#endif // FISHC_OPTION_LOADER_H_
+#endif  // FISHC_ARGUMENT_PARSER_H_

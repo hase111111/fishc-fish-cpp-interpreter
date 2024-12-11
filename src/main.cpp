@@ -2,17 +2,21 @@
 #include <iostream>
 
 #include "help_printer.h"
-#include "option_loader.h"
+#include "argument_parser.h"
 
 int main(int argc, char *argv[]) {
     using fishc::HelpPrinter;
-    using fishc::OptionLoader;
+    using fishc::ArgumentParser;
 
-    OptionLoader option_loader;
-    option_loader.Load(argc, argv);
+    ArgumentParser arg_parser;
+    arg_parser.Load(argc, argv);
 
-    if (option_loader.GetOptionNum() == 0) {
+    if (arg_parser.GetOptionNum() == 0) {
+        // if no option is specified, print help and exit.
+        std::cout << "No option is specified." << std::endl;
         HelpPrinter::PrintHelp();
+
+        return 0;
     }
 
     return 0;
