@@ -13,6 +13,11 @@ int main(int argc, char *argv[]) {
 
     ArgumentParser arg_parser(argc, argv);
 
+    if (!arg_parser.IsLoadingSuccess()) {
+        std::cout << "Arg parser failed: " << arg_parser.GetErrorReason() << std::endl;
+        return 1;
+    }
+
     const auto option = arg_parser.GetOption();
 
     if (option.is_help_mode) {

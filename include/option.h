@@ -28,6 +28,8 @@ struct Option final
     std::string code;
     std::string initial_stack;
     std::string initial_value;
+    int tick{0};
+    bool always_tick{false};
 };
 
 
