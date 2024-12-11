@@ -1,9 +1,14 @@
 
 #include "option.h"
 
+#include <cassert>
+
 namespace fishc {
 
 OptionMode ArgToOptionMode(const std::string& arg) {
+    assert(arg.size() > 0);
+    assert(IsOption(arg));
+
     if (arg == "-h" || arg == "--help") {
         return OptionMode::kHelp;
     } else if (arg == "-v" || arg == "--version") {
@@ -18,6 +23,8 @@ OptionMode ArgToOptionMode(const std::string& arg) {
         return OptionMode::kTick;
     } else if (arg == "-a" || arg == "--always-tick") {
         return OptionMode::kAlwaysTick;
+    } else if (arg == "-f" || arg == "--file") {
+        return OptionMode::kFile;
     } else {
         return OptionMode::kUnknown;
     }
