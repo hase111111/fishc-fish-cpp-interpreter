@@ -21,8 +21,7 @@ OptionMode ArgToOptionMode(const std::string& arg);
 
 bool IsOption(const std::string& arg);
 
-struct Option final
-{    
+struct Option final {
     bool is_help_mode{false};
     bool is_version_mode{false};
     std::string code;
