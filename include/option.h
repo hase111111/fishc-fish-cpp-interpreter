@@ -19,6 +19,8 @@ enum class OptionMode : int {
 
 OptionMode ArgToOptionMode(const std::string& arg);
 
+bool IsOption(const std::string& arg);
+
 struct Option final
 {    
     bool is_help_mode{false};

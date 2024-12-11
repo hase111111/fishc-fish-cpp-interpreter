@@ -23,4 +23,12 @@ OptionMode ArgToOptionMode(const std::string& arg) {
     }
 }
 
+bool IsOption(const std::string& arg) {
+    if (arg.size() == 0) {
+        return false;
+    }
+
+    return arg[0] == '-';
+}
+
 }  // namespace fishc
