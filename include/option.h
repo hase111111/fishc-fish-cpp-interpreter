@@ -17,12 +17,15 @@ enum class OptionMode : int {
     kUnknown
 };
 
+OptionMode ArgToOptionMode(const std::string& arg);
+
 struct Option final
 {    
     bool is_help_mode{false};
     bool is_version_mode{false};
     std::string code;
-
+    std::string initial_stack;
+    std::string initial_value;
 };
 
 
