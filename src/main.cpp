@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "argument_parser.h"
+#include "file_loader.h"
 #include "help_printer.h"
 #include "version.h"
 
