@@ -2,6 +2,9 @@
 # Automatically find all .cpp files in the current directory
 file(GLOB SOURCES "*.cpp")
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Add Library
 add_library(fishc_library STATIC ${SOURCES})
 
