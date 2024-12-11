@@ -1,14 +1,18 @@
 
+#include "interperter.h"
+
 #include <iostream>
 
-#include "interperter.h"
+#include "code_box.h"
 
 namespace fishc {
 
-Interpreter::Interpreter(const std::string& code) : code_(code) {}
+Interpreter::Interpreter(const std::string& code) {
+    CodeBox code_box(code);
+    std::cout << code_box.DebugString() << std::endl;
+}
 
 void Interpreter::Run() {
-    std::cout << "Running code: " << code_ << std::endl;
 }
 
 }  // namespace fishc

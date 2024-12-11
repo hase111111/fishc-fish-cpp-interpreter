@@ -2,10 +2,15 @@
 #ifndef FISHC_INTERPRETER_H_
 #define FISHC_INTERPRETER_H_
 
+#include <deque>
+#include <string>
+#include <variant>
 
 namespace fishc {
 
 class Interpreter final {
+    using fish_stack = std::deque<std::variant<int, float>>;
+
   public:
     Interpreter() = delete;
     Interpreter(const std::string& code);
@@ -14,7 +19,6 @@ class Interpreter final {
     void Run();
 
   private:
-    std::string code_;
 };
 
 }  // namespace fishc
