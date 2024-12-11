@@ -14,6 +14,7 @@ enum class OptionMode : int {
     kValue,
     kTick,
     kAlwaysTick,
+    kFile,
     kUnknown
 };
 
