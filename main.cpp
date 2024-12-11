@@ -4,7 +4,7 @@
 #include "argument_parser.h"
 #include "file_loader.h"
 #include "help_printer.h"
-#include "interperter.h"
+#include "interpreter.h"
 #include "version.h"
 
 int main(int argc, char *argv[]) {
@@ -32,6 +32,6 @@ int main(int argc, char *argv[]) {
 
     Interpreter interpreter(option.code);
     interpreter.Run();
-    
+
     return 0;
 }
