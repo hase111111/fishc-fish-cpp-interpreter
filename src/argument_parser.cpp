@@ -62,6 +62,7 @@ ArgumentParser::ArgumentParser(int argc, char *argv[]) {
                 // if the code is already loaded, skip this argument.
                 if (!has_code_) {
                     option_.code = code;
+                    has_code_ = true;
                 }
 
                 break;
