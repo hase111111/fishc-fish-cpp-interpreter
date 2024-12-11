@@ -15,6 +15,8 @@ class ArgumentParser final {
     inline Option GetOption() const { return option_; }
 
  private:
+    void ApplyOption(const OptionMode mode);
+
     Option option_{};
     bool has_code_{false};
 };

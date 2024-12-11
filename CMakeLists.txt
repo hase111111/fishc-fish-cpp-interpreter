@@ -2,7 +2,10 @@
 cmake_minimum_required(VERSION 3.10) # Set the minimum required version of CMake
 
 # Set the project name and version
-project(FishC VERSION 0.1)
+project(FishC 
+    VERSION 0.1
+    DESCRIPTION "This is esolang ><> interpreter."
+    LANGUAGES CXX)
 
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 17)
@@ -13,3 +16,8 @@ add_subdirectory(src)
 
 # Optionally include the include directory for other purposes
 include_directories(${PROJECT_SOURCE_DIR}/include)
+
+add_executable(fishc main.cpp)
+
+# Link the library to the executable
+target_link_libraries(fishc fishc_library)

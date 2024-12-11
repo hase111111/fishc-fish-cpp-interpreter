@@ -24,4 +24,4 @@ cmake --build .
 echo "[INFO] Project built successfully."
 
 # run the project
-./src/fishc
+./fishc -v

@@ -2,8 +2,8 @@
 # Automatically find all .cpp files in the current directory
 file(GLOB SOURCES "*.cpp")
 
-# Add the executable
-add_executable(fishc ${SOURCES})
+# Add Library
+add_library(fishc_library STATIC ${SOURCES})
 
 # Include the include directory
-target_include_directories(fishc PRIVATE ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(fishc_library PRIVATE ${PROJECT_SOURCE_DIR}/include)
