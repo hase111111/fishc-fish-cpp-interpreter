@@ -5,18 +5,9 @@
 #include <optional>
 #include <string>
 
-namespace fishc {
+#include "option.h"
 
-enum class Option : int {
-    kHelp = 0,
-    kVersion,
-    kCode,
-    kStack,
-    kValue,
-    kTick,
-    kAlwaysTick,
-    kUnknown
-};
+namespace fishc {
 
 class ArgumentParser final {
   public:
@@ -26,7 +17,7 @@ class ArgumentParser final {
 
     inline bool HasCodePath() const { return code_path_.has_value(); }
     inline std::string GetCodePath() const { return code_path_.value(); }
-    constexpr int GetOptionNum() const { return option_num_; }
+    inline Option GetOption() const { return Option{}; }
 
  private:
     int option_num_ = 0;

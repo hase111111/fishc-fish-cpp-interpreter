@@ -10,13 +10,6 @@ int main(int argc, char *argv[]) {
 
     ArgumentParser arg_parser(argc, argv);
 
-    if (arg_parser.GetOptionNum() == 0) {
-        // if no option is specified, print help and exit.
-        std::cout << "No option is specified." << std::endl;
-        HelpPrinter::PrintHelp();
-
-        return 0;
-    }
 
     return 0;
 }
