@@ -17,11 +17,20 @@ fi
 
 # run cmake
 echo "[INFO] Running cmake..."
-cmake ..
 
-# bulid the project
-cmake --build .
+# if not successful, exit
+if ! cmake ..; then
+    echo "[ERR] cmake failed. Exiting..."
+    exit 1
+fi
+
+# bulid the project, also check if successful
+echo "[INFO] Building project..."
+if ! make; then
+    echo "[ERR] Project build failed. Exiting..."
+    exit 1
+fi
 echo "[INFO] Project built successfully."
 
 # run the project
-./fishc -v
+./fishc --code "123ooo;" 
