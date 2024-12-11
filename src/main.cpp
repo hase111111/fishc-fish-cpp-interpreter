@@ -8,8 +8,7 @@ int main(int argc, char *argv[]) {
     using fishc::HelpPrinter;
     using fishc::ArgumentParser;
 
-    ArgumentParser arg_parser;
-    arg_parser.Load(argc, argv);
+    ArgumentParser arg_parser(argc, argv);
 
     if (arg_parser.GetOptionNum() == 0) {
         // if no option is specified, print help and exit.
