@@ -33,4 +33,4 @@ fi
 echo "[INFO] Project built successfully."
 
 # run the project
-./fishc --code "'Hello World!' r ~ oooo oooo ooo;" 
+./fishc --code ";" 

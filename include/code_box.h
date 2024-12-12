@@ -2,6 +2,7 @@
 #ifndef FIHSC_CODE_BOX_H_
 #define FIHSC_CODE_BOX_H_
 
+#include <cassert>
 #include <string>
 #include <vector>
 
@@ -15,10 +16,10 @@ class CodeBox final {
     CodeBox(const std::string& code);
     ~CodeBox() = default;
 
-    inline int GetMaxWidth() const { return max_width_; }
-    inline int GetMaxHeight() const { return max_height_; }
+    inline int GetMaxWidth() const noexcept { return max_width_; }
+    inline int GetMaxHeight() const noexcept { return max_height_; }
 
-    inline Number GetChar(int x, int y) const { 
+    inline Number GetChar(int x, int y) const noexcept {
         if (x < 0 || x >= max_width_ || y < 0 || y >= max_height_) {
             Number n = static_cast<ImplInt>(0);
             return n;

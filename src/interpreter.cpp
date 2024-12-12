@@ -12,6 +12,8 @@ namespace fishc {
 
 Interpreter::Interpreter(const std::string& code) : code_box_(code) {
     assert(register_.has_value() == false);
+
+    std::cout << code_box_.DebugString() << std::endl;
 }
 
 void Interpreter::Run() {
