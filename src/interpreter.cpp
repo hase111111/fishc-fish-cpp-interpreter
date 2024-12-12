@@ -1,6 +1,7 @@
 
 #include "interpreter.h"
 
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 #include <stdexcept>
@@ -180,6 +181,41 @@ bool Interpreter::Loop() {
         }
         case '!' : {
             skip_ = true;
+            break;
+        }
+        case ':' : {
+            if (stack_.empty()) {
+                throw std::runtime_error("Interpreter::Loop: stack is empty.");
+            }
+
+            stack_.push_back(stack_.back());
+            break;
+        }
+        case '~' : {
+            if (stack_.empty()) {
+                throw std::runtime_error("Interpreter::Loop: stack is empty.");
+            }
+
+            stack_.pop_back();
+            break;
+        }
+        case '$' : {
+            if (stack_.size() < 2) {
+                throw std::runtime_error("Interpreter::Loop: stack size is less than 2.");
+            }
+
+            Number a = stack_.back();
+            stack_.pop_back();
+            Number b = stack_.back();
+            stack_.pop_back();
+
+            stack_.push_back(a);
+            stack_.push_back(b);
+            break;
+        }
+        case 'r' : {
+            // reverse the stack.
+            std::reverse(stack_.begin(), stack_.end());
             break;
         }
         case ' ' : 
