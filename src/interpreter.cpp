@@ -220,6 +220,11 @@ bool Interpreter::Loop() {
             std::reverse(stack_.begin(), stack_.end());
             break;
         }
+        case 'l' : {
+            ImplInt i = stack_.size();
+            stack_.push_back(static_cast<ImplInt>(i));
+            break;
+        }
         case ' ' : 
         case 0: {
             break;
