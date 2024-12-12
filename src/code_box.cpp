@@ -37,9 +37,10 @@ CodeBox::CodeBox(const std::string& code) {
     for (int y = 0; y < max_height_; y++) {
         for (int x = 0; x < max_width_; x++) {
             if (x < lines[y].size()) {
-                code_box_[y][x] = lines[y][x];
+                Number n = static_cast<ImplInt>(lines[y][x]);
+                code_box_[y][x] = n;
             } else {
-                code_box_[y][x] = 0;
+                code_box_[y][x] = static_cast<ImplInt>(0);
             }
         }
     }
@@ -48,7 +49,7 @@ CodeBox::CodeBox(const std::string& code) {
     ReserveCodeBox(max_width_, max_height_);
 }
 
-void CodeBox::SetChar(int x, int y, fchar c) {
+void CodeBox::SetChar(int x, int y, Number c) {
     if (x < 0 || y < 0) {
         throw std::runtime_error("CodeBox::SetChar: x or y is less than 0.");
     }
@@ -72,26 +73,33 @@ void CodeBox::SetChar(int x, int y, fchar c) {
 
 std::string CodeBox::DebugString() const {
     std::string debug;
+    debug += "max_width: " + std::to_string(max_width_) + '\n';
+    debug += "max_height: " + std::to_string(max_height_) + '\n';
+    debug += "code_box:\n";
     for (int y = 0; y < max_height_; ++y) {
         for (int x = 0; x < max_width_; ++x) {
-            debug.push_back(code_box_[y][x]);
+            if (code_box_[y][x].index() == 0) {
+                ImplInt i = std::get<ImplInt>(code_box_[y][x]);
+                debug.push_back(static_cast<char>(i));
+            } else {
+                debug.push_back(' ');
+            }
         }
         debug.push_back('\n');
     }
 
     debug.push_back('\n');
+    debug += "code_box (number):\n";
 
     for (int x = 0; x < code_box_.size(); ++x) {
         for (int y = 0; y < code_box_[x].size(); ++y) {
-            const int c = static_cast<int>(code_box_[x][y]);
-            const std::string s = std::to_string(c);
-
-            // 0 padding.
-            for (int i = 0; i < 3 - s.size(); ++i) {
-                debug.push_back('0');
+            if (code_box_[x][y].index() == 0) {
+                ImplInt i = std::get<ImplInt>(code_box_[x][y]);
+                debug += std::to_string(i);
+            } else {
+                ImplFloat f = std::get<ImplFloat>(code_box_[x][y]);
+                debug += std::to_string(f);
             }
-
-            debug += s;
             debug.push_back(' ');
         }
         debug.push_back('\n');
@@ -112,13 +120,13 @@ void CodeBox::ReserveCodeBox(int width, int height) {
     // Fill the code box.
     for (int y = height; y < temp_height; y++) {
         for (int x = 0; x < temp_width; x++) {
-            code_box_[y][x] = 0;
+            code_box_[y][x] = static_cast<ImplInt>(0);
         }
     }
 
     for (int y = 0; y < max_height_; y++) {
         for (int x = width; x < temp_width; x++) {
-            code_box_[y][x] = 0;
+            code_box_[y][x] = static_cast<ImplInt>(0);
         }
     }
 }

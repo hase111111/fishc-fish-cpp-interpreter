@@ -4,13 +4,10 @@
 
 #include <deque>
 #include <string>
-#include <variant>
 
 namespace fishc {
 
 class Interpreter final {
-    using fish_stack = std::deque<std::variant<int, float>>;
-
   public:
     Interpreter() = delete;
     Interpreter(const std::string& code);
