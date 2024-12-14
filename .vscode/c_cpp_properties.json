@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+            "name": "Ubuntu",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/include"
+            ],
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+        }
+    ],
+    "version": 4
+}

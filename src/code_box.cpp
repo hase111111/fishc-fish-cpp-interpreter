@@ -1,6 +1,7 @@
 
 #include "code_box.h"
 
+#include <cstddef>
 #include <stdexcept>
 
 namespace fishc {
@@ -21,7 +22,7 @@ CodeBox::CodeBox(const std::string& code) {
 
     // Find the max width and height.
     for (const auto& l : lines) {
-        if (l.size() > max_width_) {
+        if (l.size() > static_cast<size_t>(max_width_)) {
             max_width_ = l.size();
         }
     }

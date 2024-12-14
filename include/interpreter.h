@@ -2,7 +2,6 @@
 #ifndef FISHC_INTERPRETER_H_
 #define FISHC_INTERPRETER_H_
 
-#include <deque>
 #include <string>
 
 #include "code_box.h"
@@ -17,6 +16,7 @@ class Interpreter final {
         kUp,
         kDown,
     };
+    
   public:
     Interpreter() = delete;
     Interpreter(const std::string& code);

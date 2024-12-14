@@ -1,6 +1,8 @@
 
 cmake_minimum_required(VERSION 3.10) # Set the minimum required version of CMake
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Set the project name and version
 project(FishC 
     VERSION 0.1
@@ -16,6 +18,7 @@ add_subdirectory(src)
 
 # Optionally include the include directory for other purposes
 include_directories(${PROJECT_SOURCE_DIR}/include)
+
 
 add_executable(fishc main.cpp)
 
