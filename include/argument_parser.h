@@ -83,6 +83,6 @@ class ArgumentParser final {
     bool has_code_{false};
 };
 
-};  // namespace fishc
+}  // namespace fishc
 
 #endif  // FISHC_ARGUMENT_PARSER_H_
