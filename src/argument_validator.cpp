@@ -2,6 +2,7 @@
 #include "argument_validator.h"
 
 #include <map>
+#include <vector>
 
 #include "utils.h"
 
@@ -16,44 +17,70 @@ std::string GetOptionNeedsArgumentMessage(const std::string &arg) {
     return "Option " + arg + " needs an argument.";
 }
 
-bool ArgumentValidator::Validate(int argc, char *argv[]) {
-    // first argument is the program name, so we skip it.
+std::string GetUnknownArgumentMessage(const std::string &arg) {
+    return "Unknown argument: " + arg;
+}
+
+std::string GetMultipleOptionMessage(const std::string &arg) {
+    return "Option " + arg + " is provided multiple times.";
+}
+
+ArgumentValidator::ArgumentValidator(const std::vector<Argument> &argument_settings)
+    : argument_settings_(argument_settings) {
+    // add help option
+    const auto help_option = Argument{{"-h", "--help"}, "Show help message"}
+        .SetIsOption(true);
+    argument_settings_.push_back(help_option);
+}
+
+bool ArgumentValidator::Validate(const int argc, const char *argv[]) {
+    std::map<int, bool> already_provided;
+    const auto not_option_argument_indexs = GetNotOptionArgumentIndexs();
+    int not_option_argument_count = 0;
+
+    // first argument is the program name, so skip it.
     for (int i = 1; i < argc; ++i) {
         const std::string arg = argv[i];
 
         if (utils::IsOption(arg.c_str())) {
+            // If the argument is an option, check if it is provided.
             const int index = MatchArgumentIndex(arg);
             if (index == -1) {
                 error_reason_str_ = GetUnknownOptionMessage(arg);
+                error_reason_ = ErrorReason::kUnknownOption;
                 return false;
             }
 
-            // If the option needs an argument, we check if it is provided.
+            // If the option is already provided, return an error.
+            if (already_provided.find(index) != already_provided.end()) {
+                error_reason_str_ = GetMultipleOptionMessage(arg);
+                error_reason_ = ErrorReason::kMultipleOption;
+                return false;
+            }
+            already_provided[index] = true;
+
+            // If the option needs an argument, check if it is provided.
             if (argument_settings_[index].need_argument) {
                 if (i + 1 >= argc) {
                     error_reason_str_ = GetOptionNeedsArgumentMessage(arg);
+                    error_reason_ = ErrorReason::kOptionNeedsArgument;
                     return false;
                 } else if (utils::IsOption(argv[i + 1])) {
                     error_reason_str_ = GetOptionNeedsArgumentMessage(arg);
+                    error_reason_ = ErrorReason::kOptionNeedsArgument;
                     return false;
                 }
 
                 ++i;
             }
         } else {
-            // If the argument is not an option, we check if it is required.
-            bool is_required = false;
-            for (const auto &arg_setting : argument_settings_) {
-                if (arg_setting.is_option) { continue; }
-
-                if (arg_setting.is_required) {
-                    is_required = true;
-                    break;
-                }
-            }
-
-            if (!is_required) {
-                error_reason_str_ = "Unknown argument: " + arg;
+            if (not_option_argument_count < static_cast<int>(not_option_argument_indexs.size())) {
+                const int index = not_option_argument_indexs[not_option_argument_count];
+                already_provided[index] = true;
+                ++not_option_argument_count;
+            } else {
+                error_reason_str_ = GetUnknownArgumentMessage(arg);
+                error_reason_ = ErrorReason::kUnknownArgument;
                 return false;
             }
         }
@@ -77,15 +104,15 @@ int ArgumentValidator::MatchArgumentIndex(const std::string &arg) const {
     return -1;
 }
 
-int ArgumentValidator::GetMaxArgNum() const {
-    int max_arg_num = 0;
-    for (const auto &arg_setting : argument_settings_) {
-        if (!arg_setting.is_option) {
-            ++max_arg_num;
+std::vector<int> ArgumentValidator::GetNotOptionArgumentIndexs() const {
+    std::vector<int> not_option_argument_indexs;
+    for (int i = 0; i < static_cast<int>(argument_settings_.size()); ++i) {
+        if (!argument_settings_[i].is_option) {
+            not_option_argument_indexs.push_back(i);
         }
     }
 
-    return max_arg_num;
+    return not_option_argument_indexs;
 }
 
 }  // namespace fishc

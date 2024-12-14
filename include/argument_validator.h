@@ -13,15 +13,15 @@ class ArgumentValidator final {
         kUnknownOption,
         kOptionNeedsArgument,
         kUnknownArgument,
+        kMultipleOption,
     };
 
     ArgumentValidator() = delete;
-    explicit ArgumentValidator(const std::vector<Argument> &argument_settings)
-        : argument_settings_(argument_settings) {}
+    explicit ArgumentValidator(const std::vector<Argument> &argument_settings);
 
     ~ArgumentValidator() = default;
 
-    bool Validate(int argc, char *argv[]);
+    bool Validate(int argc, const char *argv[]);
     inline std::string GetErrorReasonString() const { return error_reason_str_; }
     inline ErrorReason GetErrorReason() const { return error_reason_; }
 
@@ -31,7 +31,7 @@ private:
     ErrorReason error_reason_{};
 
     int MatchArgumentIndex(const std::string &arg) const;
-    int GetMaxArgNum() const;
+    std::vector<int> GetNotOptionArgumentIndexs() const;
 };
 
 }  // namespace fishc

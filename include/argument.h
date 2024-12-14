@@ -32,8 +32,7 @@ struct Argument final {
 
     bool is_required{ false };        //!< If the argument is true, the argument must be provided.
     int required_group{ -1 };         //!< The group number of the required argument.
-    bool is_option{ false };          //!< If the argument is true, the argument is an option.
-
+    bool is_option{ true };          //!< If the argument is true, the argument is an option.
 };
 
 }  // namespace fishc
