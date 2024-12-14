@@ -27,10 +27,6 @@ std::string GetMultipleOptionMessage(const std::string &arg) {
 
 ArgumentValidator::ArgumentValidator(const std::vector<Argument> &argument_settings)
     : argument_settings_(argument_settings) {
-    // add help option
-    const auto help_option = Argument{{"-h", "--help"}, "Show help message"}
-        .SetIsOption(true);
-    argument_settings_.push_back(help_option);
 }
 
 bool ArgumentValidator::Validate(const int argc, const char *argv[]) {

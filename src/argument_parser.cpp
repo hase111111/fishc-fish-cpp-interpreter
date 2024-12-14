@@ -4,13 +4,18 @@
 
 namespace fishc {
 
-ArgumentParser::ArgumentParser(int argc, char *argv[]) {
+ArgumentParser::ArgumentParser(const std::vector<Argument> &argument_settings)
+    : argument_settings_(AddHelpOption(argument_settings))
+    , argument_validator_{AddHelpOption(argument_settings)} {
+}
+
+bool ArgumentParser::Parse(int argc, char *argv[]) {
     if (argc < 2) {
         // first argument is the program name, so we need at least 2 arguments.
         // activate the help mode.
         option_.is_help_mode = true;
         is_loading_success_ = true;
-        return;
+        return false;
     }
 
     // check if the first argument is a code path.
@@ -25,7 +30,7 @@ ArgumentParser::ArgumentParser(int argc, char *argv[]) {
             // if the file is not loaded, end the program.
             is_loading_success_ = false;
             error_reason_ = "Failed to load the file: " + first_arg;
-            return;
+            return false;
         }
     }
 
@@ -56,7 +61,7 @@ ArgumentParser::ArgumentParser(int argc, char *argv[]) {
                     // if the code is not loaded, end the program.
                     is_loading_success_ = false;
                     error_reason_ = "-c, --code requires a code path.";
-                    return;
+                    return false;
                 }
 
                 // if the code is already loaded, skip this argument.
@@ -75,7 +80,7 @@ ArgumentParser::ArgumentParser(int argc, char *argv[]) {
                     // if the stack is not loaded, end the program.
                     is_loading_success_ = false;
                     error_reason_ = "-s, --stack requires a stack value.";
-                    return;
+                    return false;
                 }
                 break;
             }
@@ -87,7 +92,7 @@ ArgumentParser::ArgumentParser(int argc, char *argv[]) {
                     // if the value is not loaded, end the program.
                     is_loading_success_ = false;
                     error_reason_ = "-v, --value requires a value.";
-                    return;
+                    return false;
                 }
                 break;
             }
@@ -99,7 +104,7 @@ ArgumentParser::ArgumentParser(int argc, char *argv[]) {
                     // if the tick is not loaded, end the program.
                     is_loading_success_ = false;
                     error_reason_ = "-t, --tick requires a tick value (int).";
-                    return;
+                    return false;
                 }
                 break;
             }
@@ -111,7 +116,7 @@ ArgumentParser::ArgumentParser(int argc, char *argv[]) {
                 // if the option is not recognized, end the program.
                 is_loading_success_ = false;
                 error_reason_ = "Unknown option: " + arg;
-                return;
+                return false;
             }
             }
         }
@@ -126,6 +131,16 @@ ArgumentParser::ArgumentParser(int argc, char *argv[]) {
     }
 
     is_loading_success_ = true;
+
+    return true;
+}
+
+std::vector<Argument> ArgumentParser::AddHelpOption(const std::vector<Argument> &argument_settings) {
+    const auto help_option = Argument{{"-h", "--help"}, "Show help message."}
+        .SetIsOption(true);
+    std::vector<Argument> new_argument_settings = argument_settings;
+    new_argument_settings.push_back(help_option);
+    return new_argument_settings;
 }
 
 }  // namespace fishc

@@ -17,11 +17,6 @@ TEST_CASE("ArgumentValidator") {
         SUBCASE("GetErrorReasonString") {
             CHECK_EQ(validator.GetErrorReasonString(), "");
         }
-
-        SUBCASE("Add help option") {
-            const char *argv[] = {"test", "-h"};
-            CHECK_EQ(validator.Validate(2, argv), true);
-        }
     }
 
     SUBCASE("Validate") {
@@ -71,5 +66,19 @@ TEST_CASE("ArgumentValidator") {
             const char *argv[] = {"test", "-v", "-v"};
             CHECK_EQ(validator.Validate(3, argv), false);
         }
+    }
+
+    SUBCASE("GetErrorReason") {
+        const auto arg1 = Argument{{"-t", "--time"}, "It's show time!"}
+            .SetIsOption(true);
+
+        ArgumentValidator validator({arg1});
+
+        // Act
+        const char *argv[] = {"test", "-q"};
+        validator.Validate(2, argv);
+
+        // Assert
+        CHECK_EQ(validator.GetErrorReason(), ArgumentValidator::ErrorReason::kUnknownOption);
     }
 }
