@@ -34,5 +34,5 @@
 # Debug files
 build/
 */build/
-cache/
-*/cache/
+.cache/
+*/.cache/
