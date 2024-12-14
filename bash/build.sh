@@ -1,4 +1,14 @@
 
+# check arguments, and set the boot mode (run / test)
+if [ "$1" == "run" ]; then
+    echo "[INFO] Running the project..."
+elif [ "$1" == "test" ]; then
+    echo "[INFO] Testing the project..."
+else
+    echo "[ERR] Invalid argument. Exiting..."
+    exit 1
+fi
+
 # search build directory. If not found, create it
 if [ ! -d "build" ]; then
   echo "[ERR] build directory not found. Creating build directory..."
@@ -32,5 +42,11 @@ if ! make; then
 fi
 echo "[INFO] Project built successfully."
 
-# run the project
-./fishc --code "lllllnnnnn;"
+# run or test the project
+if [ "$1" == "run" ]; then
+    echo "[INFO] Running the project..."
+    ./fishc --code "'Sample' r oooooo ao ;"
+elif [ "$1" == "test" ]; then
+    echo "[INFO] Testing the project..."
+    ctest
+fi
