@@ -48,5 +48,6 @@ if [ "$1" == "run" ]; then
     ./fishc --code "'Sample' r oooooo ao ;"
 elif [ "$1" == "test" ]; then
     echo "[INFO] Testing the project..."
-    ctest
+    # ctest
+    ./test/fishc_test
 fi

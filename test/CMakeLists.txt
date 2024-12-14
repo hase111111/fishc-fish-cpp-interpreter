@@ -29,6 +29,9 @@ FetchContent_MakeAvailable(doctest)
 
 add_executable(fishc_test ${SOURCES})
 
+# Include the include directory
+target_include_directories(fishc_test PRIVATE ${PROJECT_SOURCE_DIR}/include)
+
 # Link the library to the executable
 target_link_libraries(fishc_test fishc_library doctest::doctest)
 
