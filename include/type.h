@@ -14,9 +14,15 @@ using Number = std::variant<ImplInt, ImplFloat>;
 using Stack = std::deque<Number>;
 using Register = std::optional<Number>;
 
-Number operator+(const Number& a, const Number& b);
-Number operator-(const Number& a, const Number& b);
-Number operator*(const Number& a, const Number& b);
+[[nodiscard]] Number operator+(const Number& a, const Number& b) noexcept;
+
+[[nodiscard]] Number operator-(const Number& a, const Number& b) noexcept;
+
+[[nodiscard]] Number operator*(const Number& a, const Number& b) noexcept;
+
+[[nodiscard]] Number operator/(const Number& a, const Number& b);
+
+[[nodiscard]] Number operator%(const Number& a, const Number& b);
 
 }  // namespace fishc
 
