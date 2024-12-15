@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <string>
 #include <vector>
 
 #include "argument.h"
@@ -21,7 +22,7 @@ class ArgumentValidator final {
 
     ~ArgumentValidator() = default;
 
-    bool Validate(int argc, const char *argv[]);
+    bool Validate(const std::vector<std::string>& args);
     inline std::string GetErrorReasonString() const { return error_reason_str_; }
     inline ErrorReason GetErrorReason() const { return error_reason_; }
 

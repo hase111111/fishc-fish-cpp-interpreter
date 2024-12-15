@@ -7,7 +7,7 @@
 #include "interpreter.h"
 #include "version.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char **argv) {
     using fishc::Argument;
     using fishc::ArgumentParser;
     using fishc::HelpPrinter;

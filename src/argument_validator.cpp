@@ -29,14 +29,14 @@ ArgumentValidator::ArgumentValidator(const std::vector<Argument> &argument_setti
     : argument_settings_(argument_settings) {
 }
 
-bool ArgumentValidator::Validate(const int argc, const char *argv[]) {
+bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
     std::map<int, bool> already_provided;
     const auto not_option_argument_indexs = GetNotOptionArgumentIndexs();
     int not_option_argument_count = 0;
 
     // first argument is the program name, so skip it.
-    for (int i = 1; i < argc; ++i) {
-        const std::string arg = argv[i];
+    for (int i = 1; i < static_cast<int>(args.size()); ++i) {
+        const std::string arg = args[i];
 
         if (utils::IsOption(arg.c_str())) {
             // If the argument is an option, check if it is provided.
@@ -57,11 +57,11 @@ bool ArgumentValidator::Validate(const int argc, const char *argv[]) {
 
             // If the option needs an argument, check if it is provided.
             if (argument_settings_[index].need_argument) {
-                if (i + 1 >= argc) {
+                if (i + 1 >= static_cast<int>(args.size())) {
                     error_reason_str_ = GetOptionNeedsArgumentMessage(arg);
                     error_reason_ = ErrorReason::kOptionNeedsArgument;
                     return false;
-                } else if (utils::IsOption(argv[i + 1])) {
+                } else if (utils::IsOption(args[i + 1])) {
                     error_reason_str_ = GetOptionNeedsArgumentMessage(arg);
                     error_reason_ = ErrorReason::kOptionNeedsArgument;
                     return false;

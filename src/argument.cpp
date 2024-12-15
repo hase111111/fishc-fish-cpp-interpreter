@@ -36,7 +36,7 @@ Argument& Argument::SetIsOption(const bool is_option) {
 
     if (is_option) {
         for (const auto &name : names) {
-            assert(utils::IsOption(name.c_str()) 
+            assert(utils::IsOption(name) 
                 && "The name must be an option.");
         }
     }

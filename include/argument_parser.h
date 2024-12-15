@@ -25,7 +25,12 @@ class ArgumentParser final {
     inline std::string GetErrorReason() const { return error_reason_; }
 
  private:
-    std::vector<Argument> AddHelpOption(const std::vector<Argument> &argument_settings);
+    [[nodiscard]]
+    std::vector<Argument> AddHelpOption(
+      const std::vector<Argument> &argument_settings) const noexcept;
+
+    [[nodiscard]]
+    std::vector<std::string> ArgArrayToVector(int argc, char *argv[]) const;
     
     std::vector<Argument> argument_settings_;
     ArgumentValidator argument_validator_;

@@ -1,12 +1,17 @@
 
-#include "argument.h"
 #include "doctest/doctest.h"
 
+#include <string>
+#include <vector>
+
+#include "argument.h"
 #include "argument_validator.h"
+
 
 TEST_CASE("ArgumentValidator") {
     using fishc::Argument;
     using fishc::ArgumentValidator;
+    using ArgStrs = const std::vector<std::string>;
 
     SUBCASE("Constructor") {
         const auto arg1 = Argument{{"-t", "--time"}, "It's show time!"}
@@ -32,39 +37,39 @@ TEST_CASE("ArgumentValidator") {
         ArgumentValidator validator(argument_settings);
 
         SUBCASE("True case 1") {
-            const char *argv1[] = {"test", "-t", "-v", "-a", "argument"};
-            auto result = validator.Validate(5, argv1);
+            ArgStrs argv1 = {"test", "-t", "-v", "-a", "argument"};
+            auto result = validator.Validate(argv1);
             CHECK_EQ(result, true);
         }
 
         SUBCASE("True case 2") {
-            const char *argv2[] = {"test", "--time", "--version", "--argument", "argument"};
-            auto result = validator.Validate(5, argv2);
+            ArgStrs argv2 = {"test", "--time", "--version", "--argument", "argument"};
+            auto result = validator.Validate(argv2);
             CHECK_EQ(result, true);
         }
 
         SUBCASE("True case 3") {
-            const char *argv3[] = {"test", "-t", "--argument", "argument", "--version",};
-            auto result = validator.Validate(5, argv3);
+            ArgStrs argv3 = {"test", "-t", "--argument", "argument", "--version",};
+            auto result = validator.Validate(argv3);
             CHECK_EQ(result, true);
         }
 
         SUBCASE("False case : Option needs argument") {
-            const char *argv[] = {"test", "-a"};
-            CHECK_EQ(validator.Validate(2, argv), false);
+            ArgStrs argv = {"test", "-a"};
+            CHECK_EQ(validator.Validate(argv), false);
 
-            const char *argv2[] = {"test", "-a", "-h"};
-            CHECK_EQ(validator.Validate(3, argv2), false);
+            ArgStrs argv2 = {"test", "-a", "-h"};
+            CHECK_EQ(validator.Validate(argv2), false);
         }
 
         SUBCASE("False case : Unknown argument") {
-            const char *argv[] = {"test", "-q"};
-            CHECK_EQ(validator.Validate(2, argv), false);
+            ArgStrs argv = {"test", "-q"};
+            CHECK_EQ(validator.Validate(argv), false);
         }
 
         SUBCASE("False case : Multiple option") {
-            const char *argv[] = {"test", "-v", "-v"};
-            CHECK_EQ(validator.Validate(3, argv), false);
+            ArgStrs argv = {"test", "-v", "-v"};
+            CHECK_EQ(validator.Validate(argv), false);
         }
     }
 
@@ -75,8 +80,8 @@ TEST_CASE("ArgumentValidator") {
         ArgumentValidator validator({arg1});
 
         // Act
-        const char *argv[] = {"test", "-q"};
-        validator.Validate(2, argv);
+        ArgStrs argv = {"test", "-q"};
+        validator.Validate(argv);
 
         // Assert
         CHECK_EQ(validator.GetErrorReason(), ArgumentValidator::ErrorReason::kUnknownOption);
