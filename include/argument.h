@@ -1,5 +1,6 @@
 
-#pragma once
+#ifndef FISHC_ARGUMENT_H_
+#define FISHC_ARGUMENT_H_
 
 #include <string>
 #include <vector>
@@ -37,3 +38,5 @@ struct Argument final {
 };
 
 }  // namespace fishc
+
+#endif  // FISHC_ARGUMENT_H_
