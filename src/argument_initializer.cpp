@@ -1,27 +1,27 @@
 
-#include "argument_parser_initializer.h"
+#include "argument_initializer.h"
 
 #include "argument.h"
 
 namespace fishc {
 
-ArgumentParser ArgumentParserInitializer::Initialize() const noexcept {
+std::vector<Argument> ArgumentInitializer::Initialize() const noexcept {
     const auto script = 
         Argument{{"script"}, ".fish file path to execute."}
             .IsRequired(1)
-            .NeedArgument("<file path>", Argument::Type::kString);
+            .NeedArgument("file path", Argument::Type::kString);
 
     const auto code_argument = 
         Argument{{"-c", "--code"}, "String of instructions to execute."}
             .IsOption()
             .IsRequired(1)
-            .NeedArgument("<code>", Argument::Type::kString);
+            .NeedArgument("code", Argument::Type::kString);
 
     const auto tick_argument = 
         Argument{{"-t", "--tick"}, "Define a tick time (second), "
             "or a delay between the execution of each instruction."}
             .IsOption()
-            .NeedArgument("<tick(float)>", Argument::Type::kInt);
+            .NeedArgument("tick(float)", Argument::Type::kInt);
 
     const auto always_tick_argument = 
         Argument{{"-a", "--always-tick"}, 
@@ -34,13 +34,13 @@ ArgumentParser ArgumentParserInitializer::Initialize() const noexcept {
         Argument{{"-s", "--string"},
             "Define a string to be used as the default stack."}
             .IsOption()
-            .NeedArgument("<default stack>", Argument::Type::kString);
+            .NeedArgument("default stack", Argument::Type::kString);
 
     const auto number_argument = 
         Argument{{"-n", "--number"},
             "Define a number to be used as the default stack."}
             .IsOption()
-            .NeedArgument("<default stack>", Argument::Type::kInt);
+            .NeedArgument("default stack", Argument::Type::kInt);
 
     const auto version_argument = 
         Argument{{"-v", "--version"}, "Show version information."}
@@ -50,8 +50,7 @@ ArgumentParser ArgumentParserInitializer::Initialize() const noexcept {
         Argument{{"-p", "--play-animation"}, "Play the animation."}
             .IsOption();
 
-    return ArgumentParser{
-        {
+    return {
             script,
             code_argument, 
             tick_argument,
@@ -60,7 +59,6 @@ ArgumentParser ArgumentParserInitializer::Initialize() const noexcept {
             number_argument,
             version_argument,
             play_animation_argument
-            }
         };
 }
 

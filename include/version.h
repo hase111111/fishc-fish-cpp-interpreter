@@ -6,6 +6,7 @@
 
 namespace fishc {
 
+const std::string kProgramName = "fishc";
 const std::string kVersion = "0.1.0";
 
 class VersionPrinter final {
