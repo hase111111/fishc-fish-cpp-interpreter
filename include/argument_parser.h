@@ -19,17 +19,16 @@ class ArgumentParser final {
 
     bool Parse(int argc, char **argv) noexcept;
 
+    [[nodiscard]]
+    bool HasOption(const std::string &option) const noexcept;
 
  private:
     [[nodiscard]]
-    std::vector<Argument> AddHelpOption(
-      const std::vector<Argument> &argument_settings) const noexcept;
-
-    [[nodiscard]]
     std::vector<std::string> ArgArrayToVector(int argc, char *argv[]) const;
     
-    std::vector<Argument> argument_settings_;
+    const std::vector<Argument> argument_settings_;
     ArgumentValidator argument_validator_;
+    std::vector<std::pair<bool, std::string>> parsed_arguments_;
 };
 
 }  // namespace fishc

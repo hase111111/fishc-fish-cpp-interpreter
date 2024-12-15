@@ -7,8 +7,8 @@ namespace fishc {
 
 ArgumentParser::ArgumentParser(
     const std::vector<Argument> &argument_settings) noexcept
-    : argument_settings_(AddHelpOption(argument_settings))
-    , argument_validator_{AddHelpOption(argument_settings)} {
+    : argument_settings_(argument_settings)
+    , argument_validator_{argument_settings} {
 }
 
 bool ArgumentParser::Parse(int argc, char **argv) noexcept {
@@ -21,13 +21,18 @@ bool ArgumentParser::Parse(int argc, char **argv) noexcept {
     return true;
 }
 
-std::vector<Argument> ArgumentParser::AddHelpOption(
-    const std::vector<Argument> &argument_settings) const noexcept {
-    const auto help_option = Argument{{"-h", "--help"}, "Show help message."}
-        .IsOption();
-    std::vector<Argument> new_argument_settings = argument_settings;
-    new_argument_settings.push_back(help_option);
-    return new_argument_settings;
+bool ArgumentParser::HasOption(const std::string &option) const noexcept {
+    for (int i = 0; i < static_cast<int>(parsed_arguments_.size()); ++i) {
+        if (!parsed_arguments_[i].first) { continue; }
+
+        for (const auto &opt : argument_settings_[i].names) {
+            if (opt == option) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 std::vector<std::string> ArgumentParser::ArgArrayToVector(

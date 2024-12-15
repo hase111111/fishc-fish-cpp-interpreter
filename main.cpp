@@ -16,8 +16,16 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    fishc::ArgumentHelpPrinter{arguments}.Print();
-    fishc::VersionPrinter{}.Print();
+    if (arg_parser.HasOption("--help")) {
+        // If the user requested help, print the help message and exit.
+        fishc::ArgumentHelpPrinter{arguments}.Print();
+        return 0;
+    }
+
+    if (arg_parser.HasOption("--version")) {
+        // If the user requested the version, print the version and exit.
+        fishc::VersionPrinter{}.Print();
+    }
 
     return 0;
 
