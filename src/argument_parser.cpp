@@ -5,12 +5,12 @@
 
 namespace fishc {
 
-ArgumentParser::ArgumentParser(const std::vector<Argument> &argument_settings)
+ArgumentParser::ArgumentParser(
+    const std::vector<Argument> &argument_settings) noexcept
     : argument_settings_(AddHelpOption(argument_settings))
-    , argument_validator_{AddHelpOption(argument_settings)}{
-}
+    , argument_validator_{AddHelpOption(argument_settings)} {}
 
-bool ArgumentParser::Parse(int argc, char **argv) {
+bool ArgumentParser::Parse(int argc, char **argv) noexcept {
     const auto args = ArgArrayToVector(argc, argv);
 
     if (!argument_validator_.Validate(args)) {
@@ -18,7 +18,6 @@ bool ArgumentParser::Parse(int argc, char **argv) {
         is_loading_success_ = false;
         return false;
     }
-
 
     return true;
 }

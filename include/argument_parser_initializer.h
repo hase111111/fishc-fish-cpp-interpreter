@@ -8,7 +8,7 @@ namespace fishc {
 
 class ArgumentParserInitializer final {
   public:
-    ArgumentParserInitializer() = default;
+    ArgumentParserInitializer() noexcept = default;
     ~ArgumentParserInitializer() = default;
 
     [[nodiscard]] ArgumentParser Initialize() const noexcept;

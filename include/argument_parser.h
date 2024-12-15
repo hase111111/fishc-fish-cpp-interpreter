@@ -14,11 +14,11 @@ namespace fishc {
 class ArgumentParser final {
   public:
     ArgumentParser() = delete;
-    ArgumentParser(const std::vector<Argument> &argument_settings);
+    ArgumentParser(const std::vector<Argument> &argument_settings) noexcept;
 
     ~ArgumentParser() = default;
 
-    bool Parse(int argc, char **argv);
+    bool Parse(int argc, char **argv) noexcept;
 
     inline Option GetOption() const { return option_; }
     inline bool IsLoadingSuccess() const { return is_loading_success_; }

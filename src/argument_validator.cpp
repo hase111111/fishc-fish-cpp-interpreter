@@ -1,6 +1,7 @@
 
 #include "argument_validator.h"
 
+#include <cassert>
 #include <map>
 #include <vector>
 
@@ -30,6 +31,8 @@ ArgumentValidator::ArgumentValidator(const std::vector<Argument> &argument_setti
 }
 
 bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
+    assert(!args.empty() && "The args must not be empty.");
+    
     std::map<int, bool> already_provided;
     const auto not_opt_arg_idx = GetNotOptionArgumentIndexs();
     int not_opt_arg_cnt = 0;

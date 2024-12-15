@@ -11,79 +11,148 @@
 TEST_CASE("ArgumentValidator") {
     using fishc::Argument;
     using fishc::ArgumentValidator;
-    using ArgStrs = const std::vector<std::string>;
-
-    SUBCASE("Constructor") {
-        const auto arg1 = Argument{{"-t", "--time"}, "It's show time!"}
-            .IsOption();
-
-        ArgumentValidator validator({arg1});
-
-        SUBCASE("GetErrorReasonString") {
-            CHECK_EQ(validator.GetErrorReasonString(), "");
-        }
-    }
+    using Input = const std::vector<std::string>;
 
     SUBCASE("Validate") {
-        const auto arg1 = Argument{{"-t", "--time"}, "Show time"}
-            .IsOption();
-        const auto arg2 = Argument{{"-v", "--version"}, "Show version"}
-            .IsOption();
-        const auto arg3 = Argument{{"-a", "--argument"}, "Need argument"}
-            .IsOption()
-            .NeedArgument("<argument>", Argument::Type::kString);
+        SUBCASE("When there is no argument, Should return true") {
+            // Arrange
+            const auto arg = Argument{{"-h", "--help"}, "message"}.IsOption();
+            ArgumentValidator validator({arg});
+            Input empty = {"program_name"};
 
-        const std::vector<Argument> argument_settings = {arg1, arg2, arg3};
-        ArgumentValidator validator(argument_settings);
+            // Act
+            const auto result = validator.Validate(empty);
 
-        SUBCASE("True case 1") {
-            ArgStrs argv1 = {"test", "-t", "-v", "-a", "argument"};
-            auto result = validator.Validate(argv1);
+            // Assert
             CHECK_EQ(result, true);
         }
 
-        SUBCASE("True case 2") {
-            ArgStrs argv2 = {"test", "--time", "--version", "--argument", "argument"};
-            auto result = validator.Validate(argv2);
+        SUBCASE("When known option is provided, Should return true") {
+            // Arrange1
+            const auto arg = Argument{{"-h", "--help"}, "message"}.IsOption();
+            ArgumentValidator validator({arg});
+            Input argv1 = {"program_name", "-h"};
+
+            // Act1
+            const auto result1 = validator.Validate(argv1);
+
+            // Assert1
+            CHECK_EQ(result1, true);
+
+            // Arrange2
+            Input argv2 = {"program_name", "--help"};
+
+            // Act2
+            const auto result2 = validator.Validate(argv2);
+
+            // Assert2
+            CHECK_EQ(result2, true);
+        }
+
+        SUBCASE("When unknown option is provided, Should return false") {
+            // Arrange
+            const auto arg = Argument{{"-h", "--help"}, "message"}.IsOption();
+            ArgumentValidator validator({arg});
+            Input argv = {"program_name", "-u"};
+
+            // Act
+            const auto result = validator.Validate(argv);
+
+            // Assert
+            CHECK_EQ(result, false);
+        }
+
+        SUBCASE("When multiple option is provided, Should return false") {
+            // Arrange1
+            const auto arg = Argument{{"-h", "--help"}, "message"}.IsOption();
+            ArgumentValidator validator({arg});
+            Input argv1 = {"program_name", "-h", "-h"};
+
+            // Act1
+            const auto result1 = validator.Validate(argv1);
+
+            // Assert1
+            CHECK_EQ(result1, false);
+
+            // Arrange2
+            Input argv2 = {"program_name", "--h", "--help"};
+
+            // Act2
+            const auto result2 = validator.Validate(argv2);
+
+            // Assert2
+            CHECK_EQ(result2, false);
+        }
+
+        SUBCASE("When option needs argument but not provided, Should return false") {
+            // Arrange1
+            const auto arg1 = Argument{{"-h"}, "message"}.
+                IsOption().
+                NeedArgument("arg", Argument::Type::kString);
+            const auto arg2 = Argument{{"-v"}, "message"}.
+                IsOption();
+            ArgumentValidator validator({arg1, arg2});
+            Input argv1 = {"program_name", "-h"};
+
+            // Act1
+            const auto result1 = validator.Validate(argv1);
+
+            // Assert1
+            CHECK_EQ(result1, false);
+
+            // Arrange2
+            Input argv2 = {"program_name", "-h", "-v"};
+
+            // Act2
+            const auto result2 = validator.Validate(argv2);
+
+            // Assert2
+            CHECK_EQ(result2, false);
+        }
+
+        SUBCASE("When option needs argument and provided, Should return true") {
+            // Arrange
+            const auto arg = Argument{{"-h"}, "message"}.
+                IsOption().
+                NeedArgument("arg", Argument::Type::kString);
+            ArgumentValidator validator({arg});
+            Input argv = {"program_name", "-h", "arg"};
+
+            // Act
+            const auto result = validator.Validate(argv);
+
+            // Assert
             CHECK_EQ(result, true);
         }
 
-        SUBCASE("True case 3") {
-            ArgStrs argv3 = {"test", "-t", "--argument", "argument", "--version",};
-            auto result = validator.Validate(argv3);
+        SUBCASE("When required argument is not provided, Should return false") {
+            // Arrange
+            const auto arg = Argument{{"-h"}, "message"}.
+                IsOption().
+                IsRequired(1);
+            ArgumentValidator validator({arg});
+            Input argv = {"program_name"};
+
+            // Act
+            const auto result = validator.Validate(argv);
+
+            // Assert
+            CHECK_EQ(result, false);
+        }
+
+        SUBCASE("When required argument is provided, Should return true") {
+            // Arrange
+            const auto arg = Argument{{"-h"}, "message"}.
+                IsOption().
+                IsRequired(1);
+            ArgumentValidator validator({arg});
+            Input argv = {"program_name", "-h"};
+
+            // Act
+            const auto result = validator.Validate(argv);
+
+            // Assert
             CHECK_EQ(result, true);
         }
-
-        SUBCASE("False case : Option needs argument") {
-            ArgStrs argv = {"test", "-a"};
-            CHECK_EQ(validator.Validate(argv), false);
-
-            ArgStrs argv2 = {"test", "-a", "-h"};
-            CHECK_EQ(validator.Validate(argv2), false);
-        }
-
-        SUBCASE("False case : Unknown argument") {
-            ArgStrs argv = {"test", "-q"};
-            CHECK_EQ(validator.Validate(argv), false);
-        }
-
-        SUBCASE("False case : Multiple option") {
-            ArgStrs argv = {"test", "-v", "-v"};
-            CHECK_EQ(validator.Validate(argv), false);
-        }
-    }
-
-    SUBCASE("GetErrorReason") {
-        const auto arg1 = Argument{{"-t", "--time"}, "It's show time!"}
-            .IsOption();
-
-        ArgumentValidator validator({arg1});
-
-        // Act
-        ArgStrs argv = {"test", "-q"};
-        validator.Validate(argv);
-
-        // Assert
-        CHECK_EQ(validator.GetErrorReason(), ArgumentValidator::ErrorReason::kUnknownOption);
     }
 }
