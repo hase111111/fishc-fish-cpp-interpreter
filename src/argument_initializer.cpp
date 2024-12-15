@@ -17,6 +17,10 @@ std::vector<Argument> ArgumentInitializer::Initialize() const noexcept {
             .IsRequired(1)
             .NeedArgument("code", Argument::Type::kString);
 
+    const auto help_option = 
+        Argument{{"-h", "--help"}, "Show help message."}
+            .IsOption();
+
     const auto tick_argument = 
         Argument{{"-t", "--tick"}, "Define a tick time (second), "
             "or a delay between the execution of each instruction."}
@@ -52,7 +56,8 @@ std::vector<Argument> ArgumentInitializer::Initialize() const noexcept {
 
     return {
             script,
-            code_argument, 
+            code_argument,
+            help_option, 
             tick_argument,
             always_tick_argument,
             string_argument,

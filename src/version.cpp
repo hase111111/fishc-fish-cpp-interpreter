@@ -5,8 +5,8 @@
 
 namespace fishc {
 
-void VersionPrinter::PrintVersion() {
-    std::cout << "Version: " << kVersion << std::endl;
+void VersionPrinter::Print() const noexcept {
+    std::cout << kProgramName << " version: " << kVersion << std::endl;
 }
 
 }  // namespace fishc

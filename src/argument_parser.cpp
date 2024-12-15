@@ -15,8 +15,6 @@ bool ArgumentParser::Parse(int argc, char **argv) noexcept {
     const auto args = ArgArrayToVector(argc, argv);
 
     if (!argument_validator_.Validate(args)) {
-        error_reason_ = argument_validator_.GetErrorReasonString();
-        is_loading_success_ = false;
         return false;
     }
 

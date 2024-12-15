@@ -11,10 +11,10 @@ const std::string kVersion = "0.1.0";
 
 class VersionPrinter final {
   public:
-    VersionPrinter() = delete;
-    ~VersionPrinter() = delete;
+    VersionPrinter() noexcept = default;
+    ~VersionPrinter() = default;
 
-    static void PrintVersion();
+    void Print() const noexcept;
 };
 
 }  // namespace fishc
