@@ -10,15 +10,7 @@ ArgumentParser::ArgumentParser(const std::vector<Argument> &argument_settings)
     , argument_validator_{AddHelpOption(argument_settings)}{
 }
 
-bool ArgumentParser::Parse(int argc, char *argv[]) {
-    if (argc < 2) {
-        // first argument is the program name, so we need at least 2 arguments.
-        // activate the help mode.
-        option_.is_help_mode = true;
-        is_loading_success_ = true;
-        return false;
-    }
-
+bool ArgumentParser::Parse(int argc, char **argv) {
     const auto args = ArgArrayToVector(argc, argv);
 
     if (!argument_validator_.Validate(args)) {

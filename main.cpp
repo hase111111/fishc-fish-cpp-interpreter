@@ -1,6 +1,4 @@
 
-#include <iostream>
-
 #include "argument_parser.h"
 #include "argument_parser_initializer.h"
 #include "help_printer.h"
@@ -14,12 +12,12 @@ int main(int argc, char **argv) {
     using fishc::Interpreter;
     using fishc::VersionPrinter;
 
+    // First, parse the command line arguments.
+
     auto arg_parser = ArgumentParserInitializer{}.Initialize();
 
-    arg_parser.Parse(argc, argv);
-
-    if (!arg_parser.IsLoadingSuccess()) {
-        std::cout << "Arg parser failed: " << arg_parser.GetErrorReason() << std::endl;
+    if (!arg_parser.Parse(argc, argv)) {
+        // If the command line arguments are invalid, exit the program.
         return 1;
     }
 

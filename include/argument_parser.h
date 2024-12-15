@@ -18,7 +18,7 @@ class ArgumentParser final {
 
     ~ArgumentParser() = default;
 
-    bool Parse(int argc, char *argv[]);
+    bool Parse(int argc, char **argv);
 
     inline Option GetOption() const { return option_; }
     inline bool IsLoadingSuccess() const { return is_loading_success_; }

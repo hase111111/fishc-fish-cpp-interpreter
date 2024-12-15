@@ -31,8 +31,8 @@ ArgumentValidator::ArgumentValidator(const std::vector<Argument> &argument_setti
 
 bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
     std::map<int, bool> already_provided;
-    const auto not_option_argument_indexs = GetNotOptionArgumentIndexs();
-    int not_option_argument_count = 0;
+    const auto not_opt_arg_idx = GetNotOptionArgumentIndexs();
+    int not_opt_arg_cnt = 0;
 
     // first argument is the program name, so skip it.
     for (int i = 1; i < static_cast<int>(args.size()); ++i) {
@@ -70,15 +70,36 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
                 ++i;
             }
         } else {
-            if (not_option_argument_count < static_cast<int>(not_option_argument_indexs.size())) {
-                const int index = not_option_argument_indexs[not_option_argument_count];
+            if (not_opt_arg_cnt < static_cast<int>(not_opt_arg_idx.size())) {
+                const int index = not_opt_arg_idx[not_opt_arg_cnt];
                 already_provided[index] = true;
-                ++not_option_argument_count;
+                ++not_opt_arg_cnt;
             } else {
                 error_reason_str_ = GetUnknownArgumentMessage(arg);
                 error_reason_ = ErrorReason::kUnknownArgument;
                 return false;
             }
+        }
+    }
+
+    // Check if all required arguments are provided.
+    const auto required_group = GetRequiredGroup();
+
+    for (const auto &group : required_group) {
+        bool is_provided = false;
+        for (int i = 0; i < static_cast<int>(argument_settings_.size()); ++i) {
+            if (argument_settings_[i].required_group == group) {
+                if (already_provided.find(i) != already_provided.end()) {
+                    is_provided = true;
+                    break;
+                }
+            }
+        }
+
+        if (!is_provided) {
+            error_reason_str_ = "Required argument is not provided.";
+            error_reason_ = ErrorReason::kUnknownArgument;
+            return false;
         }
     }
 
@@ -109,6 +130,17 @@ std::vector<int> ArgumentValidator::GetNotOptionArgumentIndexs() const {
     }
 
     return not_option_argument_indexs;
+}
+
+std::set<int> ArgumentValidator::GetRequiredGroup() const {
+    std::set<int> required_group;
+    for (int i = 0; i < static_cast<int>(argument_settings_.size()); ++i) {
+        if (argument_settings_[i].is_required) {
+            required_group.insert(argument_settings_[i].required_group);
+        }
+    }
+
+    return required_group;
 }
 
 }  // namespace fishc
