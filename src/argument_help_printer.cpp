@@ -50,7 +50,7 @@ void ArgumentHelpPrinter::PrintUsage() const noexcept {
             }
 
             if (idx != *required_argument_idx_.rbegin()) {
-                std::cout << "|";
+                std::cout << " | ";
             }
         }
         std::cout << ")";

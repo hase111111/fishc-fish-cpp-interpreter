@@ -2,7 +2,6 @@
 #include "argument_parser.h"
 
 #include "argument.h"
-#include "argument_help_printer.h"
 
 namespace fishc {
 
@@ -10,7 +9,6 @@ ArgumentParser::ArgumentParser(
     const std::vector<Argument> &argument_settings) noexcept
     : argument_settings_(AddHelpOption(argument_settings))
     , argument_validator_{AddHelpOption(argument_settings)} {
-        ArgumentHelpPrinter{argument_settings_}.Print();
 }
 
 bool ArgumentParser::Parse(int argc, char **argv) noexcept {

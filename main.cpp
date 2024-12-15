@@ -1,6 +1,7 @@
 
-#include "argument_parser.h"
+#include "argument_help_printer.h"
 #include "argument_initializer.h"
+#include "argument_parser.h"
 #include "interpreter.h"
 #include "version.h"
 
@@ -14,6 +15,8 @@ int main(int argc, char **argv) {
         // If the command line arguments are invalid, exit the program.
         return 1;
     }
+
+    fishc::ArgumentHelpPrinter{argumenys}.Print();
 
     return 0;
     const auto option = arg_parser.GetOption();
