@@ -16,6 +16,11 @@ void ArgumentHelpPrinter::Print() const noexcept {
     PrintUsage();
     std::cout << std::endl;
 
+    std::cout << "Description:" << std::endl;
+
+    PrintSpcialArguments();
+    std::cout << std::endl;
+
     PrintRequiredArguments();
     std::cout << std::endl;
 
@@ -34,8 +39,30 @@ std::set<int> ArgumentHelpPrinter::GetRequiredArgumentIdx() const noexcept {
     return required_argument_idx;
 }
 
+std::set<int> ArgumentHelpPrinter::GetSpecialArgumentIdx() const noexcept {
+    std::set<int> special_argument_idx;
+    for (int i = 0; i < static_cast<int>(argument_settings_.size()); ++i) {
+        if (argument_settings_[i].is_special) {
+            special_argument_idx.insert(i);
+        }
+    }
+
+    return special_argument_idx;
+}
+
+std::set<int> ArgumentHelpPrinter::GetOtherArgumentIdx() const noexcept {
+    std::set<int> other_argument_idx;
+    for (int i = 0; i < static_cast<int>(argument_settings_.size()); ++i) {
+        if (!argument_settings_[i].is_special && !argument_settings_[i].is_required) {
+            other_argument_idx.insert(i);
+        }
+    }
+
+    return other_argument_idx;
+}
+
 void ArgumentHelpPrinter::PrintUsage() const noexcept {
-    std::cout << "Usage: " << kProgramName << " [-h] ";
+    std::cout << "Usage: " << kProgramName << " [-h / -v] ";
 
     if (!required_argument_idx_.empty()) {
         std::cout << "(";
@@ -61,6 +88,18 @@ void ArgumentHelpPrinter::PrintUsage() const noexcept {
     }
 
     std::cout << std::endl;
+}
+
+void ArgumentHelpPrinter::PrintSpcialArguments() const noexcept {
+    std::cout << "special arguments:" << std::endl;
+    for (const auto &idx : GetSpecialArgumentIdx()) {
+        std::cout << "  ";
+        for (const auto &name : argument_settings_[idx].names) {
+            std::cout << name << " ";
+        }
+        std::cout << std::endl;
+        std::cout << "    " << argument_settings_[idx].description << std::endl;
+    }
 }
 
 void ArgumentHelpPrinter::PrintRequiredArguments() const noexcept {

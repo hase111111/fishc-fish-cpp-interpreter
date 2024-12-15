@@ -19,15 +19,19 @@ class ArgumentHelpPrinter final {
     void Print() const noexcept;
 
   private:
-    [[nodiscard]]
-    std::set<int> GetRequiredArgumentIdx() const noexcept;
+    [[nodiscard]] std::set<int> GetRequiredArgumentIdx() const noexcept;
+    [[nodiscard]] std::set<int> GetSpecialArgumentIdx() const noexcept;
+    [[nodiscard]] std::set<int> GetOtherArgumentIdx() const noexcept;
 
     void PrintUsage() const noexcept;
+    void PrintSpcialArguments() const noexcept;
     void PrintRequiredArguments() const noexcept;
     void PrintOptionalArguments() const noexcept;
 
     const std::vector<Argument> &argument_settings_;
     std::set<int> required_argument_idx_;
+    std::set<int> special_argument_idx_;
+    std::set<int> other_argument_idx_;
 };
 
 }  // namespace fishc

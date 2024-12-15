@@ -86,6 +86,18 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
     }
 
     // Check if all required arguments are provided.
+
+    // If the special argument is provided, we don't need to check the required group.
+    const auto special_arg_idx = GetSpecialArgIdx();
+
+    for (const auto &idx : special_arg_idx) {
+        if (already_provided.find(idx) != already_provided.end()) {
+            return true;
+        }
+    }
+
+    // If the special argument is not provided, we need to check the required group.
+    
     const auto required_group = GetRequiredGroup();
 
     for (const auto &group : required_group) {
@@ -144,6 +156,17 @@ std::set<int> ArgumentValidator::GetRequiredGroup() const {
     }
 
     return required_group;
+}
+
+std::set<int> ArgumentValidator::GetSpecialArgIdx() const {
+    std::set<int> special_arg_idx;
+    for (int i = 0; i < static_cast<int>(argument_settings_.size()); ++i) {
+        if (argument_settings_[i].is_special) {
+            special_arg_idx.insert(i);
+        }
+    }
+
+    return special_arg_idx;
 }
 
 }  // namespace fishc

@@ -43,4 +43,9 @@ Argument& Argument::IsOption() noexcept {
     return *this;
 }
 
+Argument& Argument::IsSpecial() noexcept {
+    this->is_special = true;
+    return *this;
+}
+
 }  // namespace fishc

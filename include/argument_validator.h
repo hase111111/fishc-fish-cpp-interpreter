@@ -35,6 +35,7 @@ private:
     int MatchArgumentIndex(const std::string &arg) const;
     std::vector<int> GetNotOptionArgumentIndexs() const;
     std::set<int> GetRequiredGroup() const;
+    std::set<int> GetSpecialArgIdx() const;
 };
 
 }  // namespace fishc
