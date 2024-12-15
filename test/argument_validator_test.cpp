@@ -86,11 +86,11 @@ TEST_CASE("ArgumentValidator") {
 
         SUBCASE("When option needs argument but not provided, Should return false") {
             // Arrange1
-            const auto arg1 = Argument{{"-h"}, "message"}.
-                IsOption().
-                NeedArgument("arg", Argument::Type::kString);
-            const auto arg2 = Argument{{"-v"}, "message"}.
-                IsOption();
+            const auto arg1 = Argument{{"-h"}, "message"}
+                .IsOption()
+                .NeedArgument("arg", Argument::Type::kString);
+            const auto arg2 = Argument{{"-v"}, "message"}
+                .IsOption();
             ArgumentValidator validator({arg1, arg2});
             Input argv1 = {"program_name", "-h"};
 
@@ -112,9 +112,9 @@ TEST_CASE("ArgumentValidator") {
 
         SUBCASE("When option needs argument and provided, Should return true") {
             // Arrange
-            const auto arg = Argument{{"-h"}, "message"}.
-                IsOption().
-                NeedArgument("arg", Argument::Type::kString);
+            const auto arg = Argument{{"-h"}, "message"}
+                .IsOption()
+                .NeedArgument("arg", Argument::Type::kString);
             ArgumentValidator validator({arg});
             Input argv = {"program_name", "-h", "arg"};
 
@@ -127,9 +127,9 @@ TEST_CASE("ArgumentValidator") {
 
         SUBCASE("When required argument is not provided, Should return false") {
             // Arrange
-            const auto arg = Argument{{"-h"}, "message"}.
-                IsOption().
-                IsRequired(1);
+            const auto arg = Argument{{"-h"}, "message"}
+                .IsOption()
+                .IsRequired(1);
             ArgumentValidator validator({arg});
             Input argv = {"program_name"};
 
@@ -142,11 +142,65 @@ TEST_CASE("ArgumentValidator") {
 
         SUBCASE("When required argument is provided, Should return true") {
             // Arrange
-            const auto arg = Argument{{"-h"}, "message"}.
-                IsOption().
-                IsRequired(1);
+            const auto arg = Argument{{"-h"}, "message"}
+                .IsOption()
+                .IsRequired(1);
             ArgumentValidator validator({arg});
             Input argv = {"program_name", "-h"};
+
+            // Act
+            const auto result = validator.Validate(argv);
+
+            // Assert
+            CHECK_EQ(result, true);
+        }
+
+        SUBCASE("When required argument is not provided but provided spcial option, Should return true") {
+            // Arrange
+            const auto arg1 = Argument{{"-h"}, "message"}
+                .IsOption()
+                .IsRequired(1);
+            const auto arg2 = Argument{{"-s"}, "message"}
+                .IsOption()
+                .IsSpecial();
+            ArgumentValidator validator({arg1, arg2});
+            Input argv = {"program_name", "-s"};
+
+            // Act
+            const auto result = validator.Validate(argv);
+
+            // Assert
+            CHECK_EQ(result, true);
+        }
+
+        SUBCASE("When required argument is provided but not enough, Should return false") {
+            // Arrange
+            const auto arg1 = Argument{{"-h"}, "message"}
+                .IsOption()
+                .IsRequired(1);
+            const auto arg2 = Argument{{"-i"}, "message"}
+                .IsOption()
+                .IsRequired(2);
+            ArgumentValidator validator({arg1, arg2});
+            Input argv = {"program_name", "-h"};
+
+            // Act
+            const auto result = validator.Validate(argv);
+
+            // Assert
+            CHECK_EQ(result, false);
+        }
+
+        SUBCASE("When required argument is provided enough, Should return true") {
+            // Arrange
+            const auto arg1 = Argument{{"-h"}, "message"}
+                .IsOption()
+                .IsRequired(1);
+            const auto arg2 = Argument{{"-i"}, "message"}
+                .IsOption()
+                .IsRequired(2);
+            ArgumentValidator validator({arg1, arg2});
+            Input argv = {"program_name", "-h", "-i"};
 
             // Act
             const auto result = validator.Validate(argv);

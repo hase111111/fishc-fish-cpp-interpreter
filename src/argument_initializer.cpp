@@ -18,7 +18,7 @@ std::vector<Argument> ArgumentInitializer::Initialize() const noexcept {
             .NeedArgument("code", Argument::Type::kString);
 
     const auto help_option = 
-        Argument{{"-h", "--help"}, "Show help message."}
+        Argument{{"-h", "--help"}, "Show help message, and exit."}
             .IsOption()
             .IsSpecial();
 
@@ -48,7 +48,7 @@ std::vector<Argument> ArgumentInitializer::Initialize() const noexcept {
             .NeedArgument("default stack", Argument::Type::kInt);
 
     const auto version_argument = 
-        Argument{{"-v", "--version"}, "Show version information."}
+        Argument{{"-v", "--version"}, "Show version information, and exit."}
             .IsOption()
             .IsSpecial();
 

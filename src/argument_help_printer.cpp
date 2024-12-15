@@ -10,7 +10,10 @@ namespace fishc {
 ArgumentHelpPrinter::ArgumentHelpPrinter(
     const std::vector<Argument> &argument_settings) noexcept
     : argument_settings_{argument_settings} 
-    , required_argument_idx_{GetRequiredArgumentIdx()} {}
+    , required_argument_idx_{GetRequiredArgumentIdx()}
+    , special_argument_idx_{GetSpecialArgumentIdx()}
+    , other_argument_idx_{GetOtherArgumentIdx()} {
+}
 
 void ArgumentHelpPrinter::Print() const noexcept {
     PrintUsage();
@@ -62,7 +65,22 @@ std::set<int> ArgumentHelpPrinter::GetOtherArgumentIdx() const noexcept {
 }
 
 void ArgumentHelpPrinter::PrintUsage() const noexcept {
-    std::cout << "Usage: " << kProgramName << " [-h / -v] ";
+    std::cout << "Usage: " << kProgramName << " ";
+
+    if (!special_argument_idx_.empty()) {
+        std::cout << "[";
+        for (const auto &idx : special_argument_idx_) {
+            std::cout << argument_settings_[idx].names[0];
+            if (argument_settings_[idx].need_argument) {
+                std::cout << " <" << argument_settings_[idx].argument_name << ">";
+            }
+
+            if (idx != *special_argument_idx_.rbegin()) {
+                std::cout << " / ";
+            }
+        }
+        std::cout << "] ";
+    }
 
     if (!required_argument_idx_.empty()) {
         std::cout << "(";
@@ -91,8 +109,7 @@ void ArgumentHelpPrinter::PrintUsage() const noexcept {
 }
 
 void ArgumentHelpPrinter::PrintSpcialArguments() const noexcept {
-    std::cout << "special arguments:" << std::endl;
-    for (const auto &idx : GetSpecialArgumentIdx()) {
+    for (const auto &idx : special_argument_idx_) {
         std::cout << "  ";
         for (const auto &name : argument_settings_[idx].names) {
             std::cout << name << " ";
@@ -119,20 +136,16 @@ void ArgumentHelpPrinter::PrintRequiredArguments() const noexcept {
 
 void ArgumentHelpPrinter::PrintOptionalArguments() const noexcept {
     std::cout << "optional arguments:" << std::endl;
-    for (int i = 0; i < static_cast<int>(argument_settings_.size()); ++i) {
-        if (required_argument_idx_.find(i) != required_argument_idx_.end()) {
-            continue;
-        }
-
+    for (const auto &idx : other_argument_idx_) {
         std::cout << "  ";
-        for (const auto &name : argument_settings_[i].names) {
+        for (const auto &name : argument_settings_[idx].names) {
             std::cout << name << " ";
-            if (argument_settings_[i].need_argument) {
-                std::cout << "<" << argument_settings_[i].argument_name << "> ";
+            if (argument_settings_[idx].need_argument && argument_settings_[idx].is_option) {
+                std::cout << "<" << argument_settings_[idx].argument_name << "> ";
             }
         }
         std::cout << std::endl;
-        std::cout << "    " << argument_settings_[i].description << std::endl;
+        std::cout << "    " << argument_settings_[idx].description << std::endl;
     }
 }
 
