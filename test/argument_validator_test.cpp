@@ -15,7 +15,7 @@ TEST_CASE("ArgumentValidator") {
 
     SUBCASE("Constructor") {
         const auto arg1 = Argument{{"-t", "--time"}, "It's show time!"}
-            .SetIsOption(true);
+            .IsOption();
 
         ArgumentValidator validator({arg1});
 
@@ -26,12 +26,12 @@ TEST_CASE("ArgumentValidator") {
 
     SUBCASE("Validate") {
         const auto arg1 = Argument{{"-t", "--time"}, "Show time"}
-            .SetIsOption(true);
+            .IsOption();
         const auto arg2 = Argument{{"-v", "--version"}, "Show version"}
-            .SetIsOption(true);
+            .IsOption();
         const auto arg3 = Argument{{"-a", "--argument"}, "Need argument"}
-            .SetIsOption(true)
-            .SetNeedArgument(true, "<argument>", Argument::Type::kString);
+            .IsOption()
+            .NeedArgument("<argument>", Argument::Type::kString);
 
         const std::vector<Argument> argument_settings = {arg1, arg2, arg3};
         ArgumentValidator validator(argument_settings);
@@ -75,7 +75,7 @@ TEST_CASE("ArgumentValidator") {
 
     SUBCASE("GetErrorReason") {
         const auto arg1 = Argument{{"-t", "--time"}, "It's show time!"}
-            .SetIsOption(true);
+            .IsOption();
 
         ArgumentValidator validator({arg1});
 

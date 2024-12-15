@@ -1,28 +1,20 @@
 
 #include <iostream>
 
-#include "argument.h"
 #include "argument_parser.h"
+#include "argument_parser_initializer.h"
 #include "help_printer.h"
 #include "interpreter.h"
 #include "version.h"
 
 int main(int argc, char **argv) {
-    using fishc::Argument;
     using fishc::ArgumentParser;
+    using fishc::ArgumentParserInitializer;
     using fishc::HelpPrinter;
     using fishc::Interpreter;
     using fishc::VersionPrinter;
 
-    const auto code_argument = 
-        Argument{{"-c", "--code"}, "Set the code."}
-        .SetNeedArgument(true, "<code>", Argument::Type::kString);
-
-    const auto tick_argument = 
-        Argument{{"-t", "--tick"}, "Set the tick value (millisecond)."}
-        .SetNeedArgument(true, "<tick>", Argument::Type::kInt);
-
-    ArgumentParser arg_parser({code_argument, tick_argument});
+    auto arg_parser = ArgumentParserInitializer{}.Initialize();
 
     arg_parser.Parse(argc, argv);
 

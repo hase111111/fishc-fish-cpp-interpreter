@@ -1,5 +1,6 @@
 
 #include "argument_parser.h"
+
 #include "file_loader.h"
 
 namespace fishc {
@@ -33,7 +34,7 @@ bool ArgumentParser::Parse(int argc, char *argv[]) {
 std::vector<Argument> ArgumentParser::AddHelpOption(
     const std::vector<Argument> &argument_settings) const noexcept {
     const auto help_option = Argument{{"-h", "--help"}, "Show help message."}
-        .SetIsOption(true);
+        .IsOption();
     std::vector<Argument> new_argument_settings = argument_settings;
     new_argument_settings.push_back(help_option);
     return new_argument_settings;

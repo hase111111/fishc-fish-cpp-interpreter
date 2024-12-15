@@ -15,15 +15,14 @@ struct Argument final {
     };
 
     Argument() = delete;
-    Argument(std::vector<std::string> names, std::string description);
+    Argument(std::vector<std::string> names, std::string description) noexcept;
     ~Argument() = default;
     
     // Builder pattern
-    Argument& SetNeedArgument(bool need_argument, std::string argument_name = "", 
-        Type argument_type = Type::kString);
-    Argument& SetIsRequired(bool is_required, int required_group);
-    Argument& SetIsOption(bool is_option);
-
+    Argument& NeedArgument(
+        const std::string& argument_name, Type argument_type) noexcept;
+    Argument& IsRequired(int required_group) noexcept;
+    Argument& IsOption() noexcept;
 
     std::vector<std::string> names;  //!< example: {"-h", "--help"}
     std::string description;         //!< example: "Show help message"
@@ -34,7 +33,7 @@ struct Argument final {
 
     bool is_required{ false };        //!< If the argument is true, the argument must be provided.
     int required_group{ -1 };         //!< The group number of the required argument.
-    bool is_option{ true };           //!< If the argument is true, the argument is an option.
+    bool is_option{ false };          //!< If the argument is true, the argument is an option.
 };
 
 }  // namespace fishc
