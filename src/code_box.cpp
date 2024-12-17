@@ -37,7 +37,7 @@ CodeBox::CodeBox(const std::string& code) {
     // Fill the code box.
     for (int y = 0; y < max_height_; y++) {
         for (int x = 0; x < max_width_; x++) {
-            if (x < lines[y].size()) {
+            if (x < static_cast<int>(lines[y].size())) {
                 Number n = static_cast<ImplInt>(lines[y][x]);
                 code_box_[y][x] = n;
             } else {
@@ -92,8 +92,8 @@ std::string CodeBox::DebugString() const {
     debug.push_back('\n');
     debug += "code_box (number):\n";
 
-    for (int x = 0; x < code_box_.size(); ++x) {
-        for (int y = 0; y < code_box_[x].size(); ++y) {
+    for (int x = 0; x < static_cast<int>(code_box_.size()); ++x) {
+        for (int y = 0; y < static_cast<int>(code_box_[x].size()); ++y) {
             if (code_box_[x][y].index() == 0) {
                 ImplInt i = std::get<ImplInt>(code_box_[x][y]);
                 debug += std::to_string(i);
