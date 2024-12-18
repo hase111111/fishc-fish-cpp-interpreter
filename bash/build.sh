@@ -48,6 +48,5 @@ if [ "$1" == "run" ]; then
     ./fishc
 elif [ "$1" == "test" ]; then
     echo "[INFO] Testing the project..."
-    # ctest
     ./test/fishc_test
 fi
