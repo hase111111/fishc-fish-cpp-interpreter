@@ -45,7 +45,7 @@ echo "[INFO] Project built successfully."
 # run or test the project
 if [ "$1" == "run" ]; then
     echo "[INFO] Running the project..."
-    ./fishc --help
+    ./fishc "an;"
 elif [ "$1" == "test" ]; then
     echo "[INFO] Testing the project..."
     # ctest

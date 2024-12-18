@@ -34,7 +34,9 @@ int main(int argc, char **argv) {
     std::string code = "'Hello, World!' rooooo oo oooooo ao;";
 
     if (arg_parser.HasOption("--code")) {
+        code = arg_parser.GetOptionValue<std::string>("--code");
     } else {
+        std::string path = arg_parser.GetOptionValue<std::string>("script");
     }
 
     fishc::Interpreter interpreter(code);
