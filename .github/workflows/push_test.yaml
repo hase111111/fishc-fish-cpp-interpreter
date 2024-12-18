@@ -1,0 +1,51 @@
+name: Update README with Test Results
+
+on:
+  push:
+    branches:
+      - devlop  # mainブランチへのpushで実行
+  pull_request:
+    branches:
+      - devlop  # pull requestでも実行
+
+jobs:
+  build-and-update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      # リポジトリのクローン
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 必要な依存関係をインストール
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential
+
+      # ビルドとテストの実行
+      - name: Build and Test
+        id: test
+        run: |
+          mkdir -p build
+          cd build
+          cmake ..
+          make
+          ./test/fishc_test > test_results.log || exit 1
+
+      # README.mdの更新
+      - name: Update README
+        run: |
+          echo "### Latest Test Results" > new_readme.md
+          echo "\`\`\`" >> new_readme.md
+          cat build/test_results.log >> new_readme.md
+          echo "\`\`\`" >> new_readme.md
+          cat README.md >> new_readme.md
+          mv new_readme.md README.md
+
+      # 更新内容をコミットしてリポジトリにpush
+      - name: Commit and Push Changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update README with test results"
+          branch: main
