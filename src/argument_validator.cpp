@@ -42,8 +42,15 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
     const auto not_opt_arg_idx = GetNotOptionArgumentIndexs();
     int not_opt_arg_cnt = 0;
 
+    // Initialize already_provided.
+    for (int i = 0; i < static_cast<int>(argument_settings_.size()); ++i) {
+        already_provided[i] = false;
+    }
+
     // first argument is the program name, so skip it.
-    for (int i = 1; i < static_cast<int>(args.size()); ++i) {
+    for (int i = 0; i < static_cast<int>(args.size()); ++i) {
+        if (i == 0) { continue; }
+
         const std::string arg = args[i];
 
         if (utils::IsOption(arg.c_str())) {
@@ -56,7 +63,7 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
             }
 
             // If the option is already provided, return an error.
-            if (already_provided.find(index) != already_provided.end()) {
+            if (already_provided[index]) {
                 error_reason_str_ = GetMultipleOptionMessage(arg);
                 error_reason_ = ErrorReason::kMultipleOption;
                 return false;
@@ -96,20 +103,19 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
     const auto special_arg_idx = GetSpecialArgIdx();
 
     for (const auto &idx : special_arg_idx) {
-        if (already_provided.find(idx) != already_provided.end()) {
+        if (already_provided[idx]) {
             return true;
         }
     }
 
     // If the special argument is not provided, we need to check the required group.
-    
     const auto required_group = GetRequiredGroup();
 
     for (const auto &group : required_group) {
         bool is_provided = false;
         for (int i = 0; i < static_cast<int>(argument_settings_.size()); ++i) {
             if (argument_settings_[i].required_group == group) {
-                if (already_provided.find(i) != already_provided.end()) {
+                if (already_provided[i]) {
                     is_provided = true;
                     break;
                 }

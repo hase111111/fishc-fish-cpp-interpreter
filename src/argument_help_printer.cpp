@@ -1,6 +1,7 @@
 
 #include "argument_help_printer.h"
 
+#include <cassert>
 #include <iostream>
 
 #include "version.h"
@@ -53,12 +54,12 @@ std::string ArgumentHelpPrinter::GetUsage() const noexcept {
         usage += "(";
         for (const auto &idx : required_argument_idx_) {
             if (argument_settings_[idx].is_option) {
-                usage += argument_settings_[idx].names[0];
-                if (argument_settings_[idx].need_argument) {
-                    usage += " <" + argument_settings_[idx].argument_name + ">";
-                }
+                    usage += argument_settings_[idx].names.front();
+                    if (argument_settings_[idx].need_argument) {
+                        usage += " <" + argument_settings_[idx].argument_name + ">";
+                    }
             } else {
-                usage += "<" + argument_settings_[idx].names[0] + ">";
+                usage += "<" + argument_settings_[idx].names.front() + ">";
             }
 
             if (idx != *required_argument_idx_.rbegin()) {
