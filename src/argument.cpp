@@ -5,7 +5,6 @@
 
 #include "utils.h"
 
-
 namespace fishc {
 
 Argument::Argument(std::vector<std::string> names, std::string description) noexcept
