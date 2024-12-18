@@ -26,8 +26,13 @@ std::string GetMultipleOptionMessage(const std::string &arg) {
     return "Option " + arg + " is provided multiple times.";
 }
 
+std::string GetRequiredArgumentMessage() {
+    return "Required argument is not provided.";
+}
+
 ArgumentValidator::ArgumentValidator(const std::vector<Argument> &argument_settings)
-    : argument_settings_(argument_settings) {
+    : argument_settings_(argument_settings) 
+    , help_printer_{argument_settings} {
 }
 
 bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
@@ -112,7 +117,9 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
         }
 
         if (!is_provided) {
-            error_reason_str_ = "Required argument is not provided.";
+            error_reason_str_ = GetRequiredArgumentMessage();
+            error_reason_str_ += "\n";
+            error_reason_str_ += help_printer_.GetUsage();
             error_reason_ = ErrorReason::kUnknownArgument;
             return false;
         }

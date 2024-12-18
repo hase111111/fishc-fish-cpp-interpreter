@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "argument.h"
+#include "argument_help_printer.h"
 
 namespace fishc {
 
@@ -31,6 +32,7 @@ private:
     std::vector<Argument> argument_settings_{};
     std::string error_reason_str_{};
     ErrorReason error_reason_{};
+    ArgumentHelpPrinter help_printer_;
 
     int MatchArgumentIndex(const std::string &arg) const;
     std::vector<int> GetNotOptionArgumentIndexs() const;

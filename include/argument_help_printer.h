@@ -17,6 +17,7 @@ class ArgumentHelpPrinter final {
     ~ArgumentHelpPrinter() = default;
 
     void Print() const noexcept;
+    std::string GetUsage() const noexcept;
 
   private:
     [[nodiscard]] std::set<int> GetRequiredArgumentIdx() const noexcept;

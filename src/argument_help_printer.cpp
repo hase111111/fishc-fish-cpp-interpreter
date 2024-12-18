@@ -31,6 +31,50 @@ void ArgumentHelpPrinter::Print() const noexcept {
     std::cout << std::endl;
 }
 
+std::string ArgumentHelpPrinter::GetUsage() const noexcept {
+    std::string usage = "Usage: " + kProgramName + " ";
+
+    if (!special_argument_idx_.empty()) {
+        usage += "[";
+        for (const auto &idx : special_argument_idx_) {
+            usage += argument_settings_[idx].names[0];
+            if (argument_settings_[idx].need_argument) {
+                usage += " <" + argument_settings_[idx].argument_name + ">";
+            }
+
+            if (idx != *special_argument_idx_.rbegin()) {
+                usage += " / ";
+            }
+        }
+        usage += "] ";
+    }
+
+    if (!required_argument_idx_.empty()) {
+        usage += "(";
+        for (const auto &idx : required_argument_idx_) {
+            if (argument_settings_[idx].is_option) {
+                usage += argument_settings_[idx].names[0];
+                if (argument_settings_[idx].need_argument) {
+                    usage += " <" + argument_settings_[idx].argument_name + ">";
+                }
+            } else {
+                usage += "<" + argument_settings_[idx].names[0] + ">";
+            }
+
+            if (idx != *required_argument_idx_.rbegin()) {
+                usage += " | ";
+            }
+        }
+        usage += ")";
+    }
+
+    if (required_argument_idx_.size() < argument_settings_.size()) {
+        usage += " [options]";
+    }
+
+    return usage;
+}
+
 std::set<int> ArgumentHelpPrinter::GetRequiredArgumentIdx() const noexcept {
     std::set<int> required_argument_idx;
     for (int i = 0; i < static_cast<int>(argument_settings_.size()); ++i) {

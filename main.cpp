@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
     }
 
     // If the user provided a script file, read the file and execute the code.
-    std::string code = "'Hello, World!' rooooo oo oooooo;";
+    std::string code = "'Hello, World!' rooooo oo oooooo ao;";
 
     if (arg_parser.HasOption("--code")) {
     } else {

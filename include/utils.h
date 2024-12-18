@@ -4,6 +4,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <sstream>
 
 namespace fishc::utils {
 
@@ -30,6 +31,14 @@ constexpr bool IsOneCharOption(const char *arg) {
 
     // size == 2 and arg[0] == - and arg[1] != -
     return arg[0] == '-' && arg[1] != '-' && arg[2] == '\0';
+}
+
+template<typename T>
+[[nodiscard]] T StringTo(const std::string &str) {
+    T value;
+    std::stringstream ss(str);
+    ss >> value;
+    return value;
 }
 
 }  // namespace fishc::utils
