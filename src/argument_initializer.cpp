@@ -56,6 +56,12 @@ std::vector<Argument> ArgumentInitializer::Initialize() const noexcept {
         Argument{{"-p", "--play-animation"}, "Play the animation."}
             .IsOption();
 
+    const auto limit_argument = 
+        Argument{{"-l", "--limit"}, "Limit the number of instructions"
+            " that can be executed."}
+            .IsOption()
+            .NeedArgument("limit", Argument::Type::kInt);
+
     return {
             script,
             code_argument,
