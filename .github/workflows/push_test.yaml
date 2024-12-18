@@ -3,10 +3,10 @@ name: Update README with Test Results
 on:
   push:
     branches:
-      - devlop  # mainブランチへのpushで実行
+      - main  # mainブランチへのpushで実行
   pull_request:
     branches:
-      - devlop  # pull requestでも実行
+      - main  # pull requestでも実行
 
 jobs:
   build-and-update-readme:
