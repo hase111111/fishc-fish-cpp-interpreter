@@ -91,6 +91,10 @@ def main() -> None:
     print(f'Test number: {test_num}')
     print(f'Success number: {success_num}')
     print(f'Failure number: {test_num - success_num}')
+    if success_num == test_num:
+        print('All tests passed!')
+    else:
+        print('Some tests failed.')
     print('=' * 40)
 
 if __name__ == '__main__':

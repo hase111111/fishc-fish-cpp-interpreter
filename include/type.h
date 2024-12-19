@@ -2,6 +2,7 @@
 #ifndef FISHC_TYPE_H_
 #define FISHC_TYPE_H_
 
+#include <cassert>
 #include <deque>
 #include <optional>
 #include <variant>
@@ -36,6 +37,14 @@ inline bool IsFloat(const Number& n) noexcept {
         return std::get<ImplFloat>(n);
     }
     return default_v;
+}
+
+[[nodiscard]]
+inline Number ToIntIfPossible(const Number& n) noexcept {
+    if (IsInt(n)) {
+        return n;
+    }
+    return static_cast<ImplInt>(std::get<ImplFloat>(n));
 }
 
 [[nodiscard]] Number operator+(const Number& a, const Number& b) noexcept;

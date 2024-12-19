@@ -27,7 +27,11 @@ class Interpreter final {
   private:
     bool Loop();  //!< Return true if the loop should continue.
     void Move();
-    bool StringMode(Number code);  //!< Return true if the string mode should continue.
+    [[nodiscard]] char CodeToChar(Number code) const;
+    bool HandleInstruction(char ch);
+
+    //! Return true if the string mode should continue.
+    bool StringMode(Number code);
 
     CodeBox code_box_;
     Stack stack_;
