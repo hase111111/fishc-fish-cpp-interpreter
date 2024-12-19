@@ -1,4 +1,8 @@
 
+// Copyright (c) 2024-2025 T.Hasegawa
+// Released under the MIT license
+// https://opensource.org/licenses/mit-license.php
+
 #include "argument.h"
 
 #include <cassert>
@@ -17,7 +21,7 @@ Argument::Argument(const std::vector<std::string>& n,
 Argument& Argument::NeedValue(
     const std::string& v_name, const Type v_type) noexcept {
     assert(!v_name.empty() && 
-        "The argument_name must not be empty if need_argument is true.");
+        "The value_name must not be empty if need_value is true.");
 
     this->need_value = true;
     this->value_name = v_name;
