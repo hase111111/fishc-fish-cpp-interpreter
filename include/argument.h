@@ -1,4 +1,8 @@
 
+// Copyright (c) 2024-2025 T.Hasegawa
+// Released under the MIT license
+// https://opensource.org/licenses/mit-license.php
+
 #ifndef FISHC_ARGUMENT_H_
 #define FISHC_ARGUMENT_H_
 
@@ -21,6 +25,7 @@ struct Argument final {
              const std::string& description) noexcept;
     ~Argument() = default;
     
+
     // Builder Pattern for Argument.
 
     [[nodiscard]]
@@ -36,10 +41,17 @@ struct Argument final {
     [[nodiscard]]
     Argument& IsSpecial() noexcept;
 
+
     // Variables.
 
-    std::vector<std::string> names;  //!< example: {"-h", "--help"}
-    std::string description;         //!< example: "Show help message"
+    //! The names of the argument. Can be multiple names.
+    //! If the argument is an option, the name must start with "-".
+    //! example: {"-h", "--help"}
+    std::vector<std::string> names;
+
+    //! The description displayed in the help menu.
+    //! example: "Show help message"
+    std::string description;
 
     bool need_argument{ false };          //!< If the argument is true, the option needs an argument.
     std::string argument_name;            //!< example: "script"
