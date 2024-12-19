@@ -215,7 +215,7 @@ TEST_CASE("ArgumentValidator") {
             // Arrange
             const auto arg1 = Argument{{"-h"}, "message"}
                 .IsOption()
-                .NeedValue("arg", Argument::Type::kVectorInt);
+                .NeedValue("arg", Argument::Type::kInt, true);
             const auto arg2 = Argument{{"sample"}, "message"}
                 .NeedValue("arg", Argument::Type::kInt);
             const auto arg3 = Argument{{"-t"}, "message"}

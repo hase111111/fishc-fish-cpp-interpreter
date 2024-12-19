@@ -84,7 +84,7 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) noexcept 
                     return false;
                 }
 
-                if (Argument::IsVectorType(argument_settings_[index].value_type)) {
+                if (argument_settings_[index].value_is_vector) {
                     // If the argument is a vector, need to check the next arguments.
                     ++i;
                     while (i < static_cast<int>(args.size()) && !utils::IsOption(args[i])) {

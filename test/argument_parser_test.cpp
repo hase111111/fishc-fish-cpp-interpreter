@@ -143,7 +143,7 @@ TEST_CASE("ArgumentParser") {
             // Arrange
             const auto arg = Argument{{"-h"}, "message"}
                 .IsOption()
-                .NeedValue("arg", Argument::Type::kVectorInt);
+                .NeedValue("arg", Argument::Type::kInt, true);
             ArgumentParser parser({arg});
             Input args = {"program_name", "-h", "1", "2", "3"};
             parser.Parse(args);

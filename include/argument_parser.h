@@ -29,8 +29,7 @@ class ArgumentParser final {
         const auto name = StrToArgFirstName(option);
         if (parsed_args_.count(name) == 0) { return T{}; }
 
-        if (Argument::IsVectorType(
-          argument_settings_[name_to_idx_.at(name)].value_type)) {
+        if (argument_settings_[name_to_idx_.at(name)].value_is_vector) {
             return T{};
         }
 
@@ -46,8 +45,7 @@ class ArgumentParser final {
         const auto name = StrToArgFirstName(option);
         if (parsed_args_.count(name) == 0) { return std::vector<T>{}; }
 
-        if (!Argument::IsVectorType(
-          argument_settings_[name_to_idx_.at(name)].value_type)) {
+        if (!argument_settings_[name_to_idx_.at(name)].value_is_vector) {
             return std::vector<T>{};
         }
 

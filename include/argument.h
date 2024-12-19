@@ -17,13 +17,7 @@ struct Argument final {
         kInt,
         kFloat,
         kString,
-        kVectorInt,
     };
-
-    [[nodiscard]]
-    inline static bool IsVectorType(const Type type) noexcept {
-        return type == Type::kVectorInt;
-    }
 
     Argument() = delete;
     Argument(const std::vector<std::string>& names, 
@@ -35,7 +29,8 @@ struct Argument final {
 
     [[nodiscard]]
     Argument& NeedValue(
-        const std::string& value_name, Type value_type) noexcept;
+        const std::string& value_name, Type value_type, 
+        bool value_is_vector = false) noexcept;
 
     [[nodiscard]]
     Argument& IsRequired(int required_group) noexcept;
@@ -69,6 +64,8 @@ struct Argument final {
 
     //! The type of the value.
     Type value_type{ Type::kString };
+
+    bool value_is_vector{ false };
 
     bool is_required{ false };        //!< If the argument is true, the argument must be provided.
     int required_group{ -1 };         //!< The group number of the required argument.

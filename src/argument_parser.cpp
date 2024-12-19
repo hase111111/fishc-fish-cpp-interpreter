@@ -45,8 +45,7 @@ bool ArgumentParser::Parse(const std::vector<std::string>& args) noexcept {
                 parsed_args_[name].push_back(args[i + 1]);
                 ++i;
 
-                if (Argument::IsVectorType(
-                    argument_settings_[name_to_idx_.at(name)].value_type)) {
+                if (argument_settings_[name_to_idx_.at(name)].value_is_vector) {
                     // If the argument is a vector, need to check the next arguments.
                     while (i + 1 < static_cast<int>(args.size()) && 
                         !utils::IsOption(args[i + 1])) {
