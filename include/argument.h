@@ -29,8 +29,8 @@ struct Argument final {
     // Builder Pattern for Argument.
 
     [[nodiscard]]
-    Argument& NeedArgument(
-        const std::string& argument_name, Type argument_type) noexcept;
+    Argument& NeedValue(
+        const std::string& value_name, Type value_type) noexcept;
 
     [[nodiscard]]
     Argument& IsRequired(int required_group) noexcept;
@@ -53,9 +53,9 @@ struct Argument final {
     //! example: "Show help message"
     std::string description;
 
-    bool need_argument{ false };          //!< If the argument is true, the option needs an argument.
-    std::string argument_name;            //!< example: "script"
-    Type argument_type{ Type::kString };  //!< example: kString
+    bool need_value{ false };          //!< If true, the option needs a value.
+    std::string value_name;            //!< example: "script"
+    Type value_type{ Type::kString };  //!< example: kString
 
     bool is_required{ false };        //!< If the argument is true, the argument must be provided.
     int required_group{ -1 };         //!< The group number of the required argument.

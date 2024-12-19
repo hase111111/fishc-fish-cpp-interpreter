@@ -39,8 +39,8 @@ std::string ArgumentHelpPrinter::GetUsage() const noexcept {
         usage += "[";
         for (const auto &idx : special_argument_idx_) {
             usage += argument_settings_[idx].names[0];
-            if (argument_settings_[idx].need_argument) {
-                usage += " <" + argument_settings_[idx].argument_name + ">";
+            if (argument_settings_[idx].need_value) {
+                usage += " <" + argument_settings_[idx].value_name + ">";
             }
 
             if (idx != *special_argument_idx_.rbegin()) {
@@ -55,8 +55,8 @@ std::string ArgumentHelpPrinter::GetUsage() const noexcept {
         for (const auto &idx : required_argument_idx_) {
             if (argument_settings_[idx].is_option) {
                     usage += argument_settings_[idx].names.front();
-                    if (argument_settings_[idx].need_argument) {
-                        usage += " <" + argument_settings_[idx].argument_name + ">";
+                    if (argument_settings_[idx].need_value) {
+                        usage += " <" + argument_settings_[idx].value_name + ">";
                     }
             } else {
                 usage += "<" + argument_settings_[idx].names.front() + ">";
@@ -116,8 +116,8 @@ void ArgumentHelpPrinter::PrintUsage() const noexcept {
         std::cout << "[";
         for (const auto &idx : special_argument_idx_) {
             std::cout << argument_settings_[idx].names[0];
-            if (argument_settings_[idx].need_argument) {
-                std::cout << " <" << argument_settings_[idx].argument_name << ">";
+            if (argument_settings_[idx].need_value) {
+                std::cout << " <" << argument_settings_[idx].value_name << ">";
             }
 
             if (idx != *special_argument_idx_.rbegin()) {
@@ -132,8 +132,8 @@ void ArgumentHelpPrinter::PrintUsage() const noexcept {
         for (const auto &idx : required_argument_idx_) {
             if (argument_settings_[idx].is_option) {
                 std::cout << argument_settings_[idx].names[0];
-                if (argument_settings_[idx].need_argument) {
-                    std::cout << " <" << argument_settings_[idx].argument_name << ">";
+                if (argument_settings_[idx].need_value) {
+                    std::cout << " <" << argument_settings_[idx].value_name << ">";
                 }
             } else {
                 std::cout << "<" << argument_settings_[idx].names[0] << ">";
@@ -170,8 +170,8 @@ void ArgumentHelpPrinter::PrintRequiredArguments() const noexcept {
         std::cout << "  ";
         for (const auto &name : argument_settings_[idx].names) {
             std::cout << name << " ";
-            if (argument_settings_[idx].need_argument && argument_settings_[idx].is_option) {
-                std::cout << "<" << argument_settings_[idx].argument_name << "> ";
+            if (argument_settings_[idx].need_value && argument_settings_[idx].is_option) {
+                std::cout << "<" << argument_settings_[idx].value_name << "> ";
             }
         }
         std::cout << std::endl;
@@ -185,8 +185,8 @@ void ArgumentHelpPrinter::PrintOptionalArguments() const noexcept {
         std::cout << "  ";
         for (const auto &name : argument_settings_[idx].names) {
             std::cout << name << " ";
-            if (argument_settings_[idx].need_argument && argument_settings_[idx].is_option) {
-                std::cout << "<" << argument_settings_[idx].argument_name << "> ";
+            if (argument_settings_[idx].need_value && argument_settings_[idx].is_option) {
+                std::cout << "<" << argument_settings_[idx].value_name << "> ";
             }
         }
         std::cout << std::endl;

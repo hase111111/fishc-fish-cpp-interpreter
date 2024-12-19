@@ -71,7 +71,7 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
             already_provided[index] = true;
 
             // If the option needs an argument, check if it is provided.
-            if (argument_settings_[index].need_argument) {
+            if (argument_settings_[index].need_value) {
                 if (i + 1 >= static_cast<int>(args.size())) {
                     error_reason_str_ = GetOptionNeedsArgumentMessage(arg);
                     error_reason_ = ErrorReason::kOptionNeedsArgument;

@@ -7,21 +7,21 @@
 
 namespace fishc {
 
-Argument::Argument(const std::vector<std::string>& names, 
-                   const std::string& description) noexcept
-    : names(names)
-    , description(description) {
+Argument::Argument(const std::vector<std::string>& n, 
+                   const std::string& desc) noexcept
+    : names(n)
+    , description(desc) {
     assert(!names.empty() && "The names must not be empty.");
 }
 
-Argument& Argument::NeedArgument(
-    const std::string& argument_name, const Type argument_type) noexcept {
-    assert(!argument_name.empty() && 
+Argument& Argument::NeedValue(
+    const std::string& v_name, const Type v_type) noexcept {
+    assert(!v_name.empty() && 
         "The argument_name must not be empty if need_argument is true.");
 
-    this->need_argument = true;
-    this->argument_name = argument_name;
-    this->argument_type = argument_type;
+    this->need_value = true;
+    this->value_name = v_name;
+    this->value_type = v_type;
     return *this;
 }
 

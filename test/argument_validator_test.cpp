@@ -84,11 +84,11 @@ TEST_CASE("ArgumentValidator") {
             CHECK_EQ(result2, false);
         }
 
-        SUBCASE("When option needs argument but not provided, Should return false") {
+        SUBCASE("When option needs value but not provided, Should return false") {
             // Arrange1
             const auto arg1 = Argument{{"-h"}, "message"}
                 .IsOption()
-                .NeedArgument("arg", Argument::Type::kString);
+                .NeedValue("arg", Argument::Type::kString);
             const auto arg2 = Argument{{"-v"}, "message"}
                 .IsOption();
             ArgumentValidator validator({arg1, arg2});
@@ -110,11 +110,11 @@ TEST_CASE("ArgumentValidator") {
             CHECK_EQ(result2, false);
         }
 
-        SUBCASE("When option needs argument and provided, Should return true") {
+        SUBCASE("When option needs value and provided, Should return true") {
             // Arrange
             const auto arg = Argument{{"-h"}, "message"}
                 .IsOption()
-                .NeedArgument("arg", Argument::Type::kString);
+                .NeedValue("arg", Argument::Type::kString);
             ArgumentValidator validator({arg});
             Input argv = {"program_name", "-h", "arg"};
 

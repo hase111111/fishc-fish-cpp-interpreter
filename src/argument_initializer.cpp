@@ -9,13 +9,13 @@ std::vector<Argument> ArgumentInitializer::Initialize() const noexcept {
     const auto script = 
         Argument{{"script"}, ".fish file path to execute."}
             .IsRequired(1)
-            .NeedArgument("file path", Argument::Type::kString);
+            .NeedValue("file path", Argument::Type::kString);
 
     const auto code_argument = 
         Argument{{"-c", "--code"}, "String of instructions to execute."}
             .IsOption()
             .IsRequired(1)
-            .NeedArgument("code", Argument::Type::kString);
+            .NeedValue("code", Argument::Type::kString);
 
     const auto help_option = 
         Argument{{"-h", "--help"}, "Show help message, and exit."}
@@ -26,7 +26,7 @@ std::vector<Argument> ArgumentInitializer::Initialize() const noexcept {
         Argument{{"-t", "--tick"}, "Define a tick time (second), "
             "or a delay between the execution of each instruction."}
             .IsOption()
-            .NeedArgument("tick(float)", Argument::Type::kInt);
+            .NeedValue("tick(float)", Argument::Type::kInt);
 
     const auto always_tick_argument = 
         Argument{{"-a", "--always-tick"}, 
@@ -39,13 +39,13 @@ std::vector<Argument> ArgumentInitializer::Initialize() const noexcept {
         Argument{{"-s", "--string"},
             "Define a string to be used as the default stack."}
             .IsOption()
-            .NeedArgument("default stack", Argument::Type::kString);
+            .NeedValue("default stack", Argument::Type::kString);
 
     const auto number_argument = 
         Argument{{"-n", "--number"},
             "Define a number to be used as the default stack."}
             .IsOption()
-            .NeedArgument("default stack", Argument::Type::kInt);
+            .NeedValue("default stack", Argument::Type::kInt);
 
     const auto version_argument = 
         Argument{{"-v", "--version"}, "Show version information, and exit."}
@@ -60,7 +60,7 @@ std::vector<Argument> ArgumentInitializer::Initialize() const noexcept {
         Argument{{"-l", "--limit"}, "Limit the number of instructions"
             " that can be executed."}
             .IsOption()
-            .NeedArgument("limit", Argument::Type::kInt);
+            .NeedValue("limit", Argument::Type::kInt);
 
     return {
             script,

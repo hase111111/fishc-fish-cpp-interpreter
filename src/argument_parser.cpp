@@ -63,7 +63,7 @@ bool ArgumentParser::Parse(int argc, char **argv) noexcept {
                 if (args[i] != opt) { continue; }
 
                 parsed_args_[j].first = true;
-                if (argument_settings_[j].need_argument) {
+                if (argument_settings_[j].need_value) {
                     parsed_args_[j].second = args[i + 1];
                     ++i;
                 }

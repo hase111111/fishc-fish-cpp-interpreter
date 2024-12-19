@@ -73,12 +73,12 @@ TEST_CASE("ArgumentParser") {
             CHECK_EQ(result, true);
         }
 
-        SUBCASE("When there is a argument which need an argument "
-            "but there is no argument, Should return false") {
+        SUBCASE("When there is a argument which need a value "
+            "but there is no value, Should return false") {
             // Arrange
             const auto arg = Argument{{"-h", "--help"}, "message"}
                 .IsOption()
-                .NeedArgument("sample", Argument::Type::kString);
+                .NeedValue("sample", Argument::Type::kString);
 
             ArgumentParser parser({arg});
             int argc = 2;
@@ -91,12 +91,12 @@ TEST_CASE("ArgumentParser") {
             CHECK_EQ(result, false);
         }
 
-        SUBCASE("When there is a argument which need an argument "
-            "and there is an argument, Should return true") {
+        SUBCASE("When there is a argument which need a value "
+            "and there is a value, Should return true") {
             // Arrange
             const auto arg = Argument{{"-h", "--help"}, "message"}
                 .IsOption()
-                .NeedArgument("sample", Argument::Type::kString);
+                .NeedValue("sample", Argument::Type::kString);
 
             ArgumentParser parser({arg});
             int argc = 3;

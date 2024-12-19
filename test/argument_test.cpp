@@ -13,25 +13,25 @@ TEST_CASE("Argument") {
         CHECK_EQ(arg.names[1], "--help");
         CHECK_EQ(arg.description, "Show help message");
 
-        CHECK_EQ(arg.need_argument, false);
+        CHECK_EQ(arg.need_value, false);
         CHECK_EQ(arg.is_option, false);
         CHECK_EQ(arg.is_required, false);
     }
 
-    SUBCASE("NeedArgument") {
+    SUBCASE("NeedValue") {
         Argument arg = Argument{{"-h", "--help"}, "Show help message"}
-            .NeedArgument("<script>", Argument::Type::kString);
+            .NeedValue("script", Argument::Type::kString);
 
-        SUBCASE("Should need_argument be true") {
-            CHECK_EQ(arg.need_argument, true);
+        SUBCASE("Should need_value be true") {
+            CHECK_EQ(arg.need_value, true);
         }
 
-        SUBCASE("When arg is <script>, Should argument_name be <script>") {
-            CHECK_EQ(arg.argument_name, "<script>");
+        SUBCASE("When arg is script, Should value_name be script") {
+            CHECK_EQ(arg.value_name, "script");
         }
 
-        SUBCASE("When arg is kString, Should argument_type be kString") {
-            CHECK_EQ(arg.argument_type, Argument::Type::kString);
+        SUBCASE("When arg is kString, Should value_type be kString") {
+            CHECK_EQ(arg.value_type, Argument::Type::kString);
         }
     }
 
