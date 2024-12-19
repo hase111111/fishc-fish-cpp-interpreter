@@ -34,18 +34,20 @@ Argument& Argument::IsRequired(const int required_group) noexcept {
 Argument& Argument::IsOption() noexcept {
     this->is_option = true;
 
-    if (is_option) {
-        for (const auto &name : names) {
-            assert(utils::IsOption(name) 
-                && "The name must be an option.");
-        }
+    for (const auto &name : names) {
+        assert(utils::IsOption(name) 
+            && "The name must be an option.");
     }
 
     return *this;
 }
 
-Argument& Argument::IsSpecial() noexcept {
-    this->is_special = true;
+Argument& Argument::IsInfoOption() noexcept {
+    assert(is_option 
+        && "The argument must be an option."
+           "Use IsOption() before using IsInfoOption().");
+
+    this->is_info = true;
     return *this;
 }
 

@@ -174,7 +174,7 @@ std::set<int> ArgumentValidator::GetRequiredGroup() const {
 std::set<int> ArgumentValidator::GetSpecialArgIdx() const {
     std::set<int> special_arg_idx;
     for (int i = 0; i < static_cast<int>(argument_settings_.size()); ++i) {
-        if (argument_settings_[i].is_special) {
+        if (argument_settings_[i].is_info) {
             special_arg_idx.insert(i);
         }
     }

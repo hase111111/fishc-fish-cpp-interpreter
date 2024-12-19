@@ -90,7 +90,7 @@ std::set<int> ArgumentHelpPrinter::GetRequiredArgumentIdx() const noexcept {
 std::set<int> ArgumentHelpPrinter::GetSpecialArgumentIdx() const noexcept {
     std::set<int> special_argument_idx;
     for (int i = 0; i < static_cast<int>(argument_settings_.size()); ++i) {
-        if (argument_settings_[i].is_special) {
+        if (argument_settings_[i].is_info) {
             special_argument_idx.insert(i);
         }
     }
@@ -101,7 +101,7 @@ std::set<int> ArgumentHelpPrinter::GetSpecialArgumentIdx() const noexcept {
 std::set<int> ArgumentHelpPrinter::GetOtherArgumentIdx() const noexcept {
     std::set<int> other_argument_idx;
     for (int i = 0; i < static_cast<int>(argument_settings_.size()); ++i) {
-        if (!argument_settings_[i].is_special && !argument_settings_[i].is_required) {
+        if (!argument_settings_[i].is_info && !argument_settings_[i].is_required) {
             other_argument_idx.insert(i);
         }
     }

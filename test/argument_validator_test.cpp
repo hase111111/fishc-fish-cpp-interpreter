@@ -155,14 +155,15 @@ TEST_CASE("ArgumentValidator") {
             CHECK_EQ(result, true);
         }
 
-        SUBCASE("When required argument is not provided but provided spcial option, Should return true") {
+        SUBCASE("When required argument is not provided "
+            "but provided info option, Should return true") {
             // Arrange
             const auto arg1 = Argument{{"-h"}, "message"}
                 .IsOption()
                 .IsRequired(1);
             const auto arg2 = Argument{{"-s"}, "message"}
                 .IsOption()
-                .IsSpecial();
+                .IsInfoOption();
             ArgumentValidator validator({arg1, arg2});
             Input argv = {"program_name", "-s"};
 

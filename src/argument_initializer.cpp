@@ -20,7 +20,7 @@ std::vector<Argument> ArgumentInitializer::Initialize() const noexcept {
     const auto help_option = 
         Argument{{"-h", "--help"}, "Show help message, and exit."}
             .IsOption()
-            .IsSpecial();
+            .IsInfoOption();
 
     const auto tick_argument = 
         Argument{{"-t", "--tick"}, "Define a tick time (second), "
@@ -50,7 +50,7 @@ std::vector<Argument> ArgumentInitializer::Initialize() const noexcept {
     const auto version_argument = 
         Argument{{"-v", "--version"}, "Show version information, and exit."}
             .IsOption()
-            .IsSpecial();
+            .IsInfoOption();
 
     const auto play_animation_argument = 
         Argument{{"-p", "--play-animation"}, "Play the animation."}

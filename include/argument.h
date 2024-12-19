@@ -39,7 +39,7 @@ struct Argument final {
     Argument& IsOption() noexcept;
 
     [[nodiscard]]
-    Argument& IsSpecial() noexcept;
+    Argument& IsInfoOption() noexcept;
 
 
     // Variables.
@@ -53,14 +53,22 @@ struct Argument final {
     //! example: "Show help message"
     std::string description;
 
-    bool need_value{ false };          //!< If true, the option needs a value.
-    std::string value_name;            //!< example: "script"
-    Type value_type{ Type::kString };  //!< example: kString
+    //! If true, the option needs a value.
+    //! For example, it becomes true 
+    //! when you need to specify a value in the form of --number 100.
+    bool need_value{ false };
+
+    //! The name of the value displayed when help is used. 
+    //! Like -n <number>.
+    std::string value_name;
+
+    //! The type of the value.
+    Type value_type{ Type::kString };
 
     bool is_required{ false };        //!< If the argument is true, the argument must be provided.
     int required_group{ -1 };         //!< The group number of the required argument.
     bool is_option{ false };          //!< If the argument is true, the argument is an option.
-    bool is_special{ false };         //!< If the argument is true, the argument is a special argument.
+    bool is_info{ false };         //!< If the argument is true, the argument is a special argument.
 };
 
 }  // namespace fishc
