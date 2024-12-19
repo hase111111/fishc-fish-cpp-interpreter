@@ -7,7 +7,7 @@
 
 #include "utils.h"
 
-namespace fishc {
+namespace fishc::internal {
 
 std::string GetUnknownOptionMessage(const std::string &arg) {
     return "Unknown option: " + arg + 
@@ -30,12 +30,16 @@ std::string GetRequiredArgumentMessage() {
     return "Required argument is not provided.";
 }
 
-ArgumentValidator::ArgumentValidator(const std::vector<Argument> &argument_settings)
+}  // namespace fishc::internal
+
+namespace fishc {
+
+ArgumentValidator::ArgumentValidator(const std::vector<Argument> &argument_settings) noexcept
     : argument_settings_(argument_settings) 
     , help_printer_{argument_settings} {
 }
 
-bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
+bool ArgumentValidator::Validate(const std::vector<std::string>& args) noexcept {
     assert(!args.empty() && "The args must not be empty.");
     
     std::map<int, bool> already_provided;
@@ -49,6 +53,7 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
 
     // first argument is the program name, so skip it.
     for (int i = 0; i < static_cast<int>(args.size()); ++i) {
+        // first argument is the program name, so skip it.
         if (i == 0) { continue; }
 
         const std::string arg = args[i];
@@ -57,13 +62,13 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
             // If the argument is an option, check if it is provided.
             const int index = MatchArgumentIndex(arg);
             if (index == -1) {
-                error_reason_str_ = GetUnknownOptionMessage(arg);
+                error_reason_str_ = internal::GetUnknownOptionMessage(arg);
                 return false;
             }
 
             // If the option is already provided, return an error.
             if (already_provided[index]) {
-                error_reason_str_ = GetMultipleOptionMessage(arg);
+                error_reason_str_ = internal::GetMultipleOptionMessage(arg);
                 return false;
             }
             already_provided[index] = true;
@@ -71,10 +76,10 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
             // If the option needs an argument, check if it is provided.
             if (argument_settings_[index].need_value) {
                 if (i + 1 >= static_cast<int>(args.size())) {
-                    error_reason_str_ = GetOptionNeedsArgumentMessage(arg);
+                    error_reason_str_ = internal::GetOptionNeedsArgumentMessage(arg);
                     return false;
                 } else if (utils::IsOption(args[i + 1])) {
-                    error_reason_str_ = GetOptionNeedsArgumentMessage(arg);
+                    error_reason_str_ = internal::GetOptionNeedsArgumentMessage(arg);
                     return false;
                 }
 
@@ -86,7 +91,7 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
                 already_provided[index] = true;
                 ++not_opt_arg_cnt;
             } else {
-                error_reason_str_ = GetUnknownArgumentMessage(arg);
+                error_reason_str_ = internal::GetUnknownArgumentMessage(arg);
                 return false;
             }
         }
@@ -118,7 +123,7 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
         }
 
         if (!is_provided) {
-            error_reason_str_ = GetRequiredArgumentMessage();
+            error_reason_str_ = internal::GetRequiredArgumentMessage();
             error_reason_str_ += "\n";
             error_reason_str_ += help_printer_.GetUsage();
             return false;

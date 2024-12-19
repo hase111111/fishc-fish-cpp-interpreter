@@ -20,6 +20,11 @@ struct Argument final {
         kVectorInt,
     };
 
+    [[nodiscard]]
+    inline static bool IsVectorType(const Type type) noexcept {
+        return type == Type::kVectorInt;
+    }
+
     Argument() = delete;
     Argument(const std::vector<std::string>& names, 
              const std::string& description) noexcept;

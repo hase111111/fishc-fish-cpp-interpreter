@@ -13,12 +13,16 @@ namespace fishc {
 class ArgumentValidator final {
   public:
     ArgumentValidator() = delete;
-    explicit ArgumentValidator(const std::vector<Argument> &argument_settings);
+    explicit ArgumentValidator(const std::vector<Argument> &argument_settings) noexcept;
 
     ~ArgumentValidator() = default;
 
-    bool Validate(const std::vector<std::string>& args);
-    inline std::string GetErrorReasonString() const { return error_reason_str_; }
+    bool Validate(const std::vector<std::string>& args) noexcept;
+
+    [[nodiscard]]
+    inline std::string GetErrorReasonString() const noexcept {
+        return error_reason_str_;
+    }
 
 private:
     std::vector<Argument> argument_settings_{};
