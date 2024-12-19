@@ -58,14 +58,12 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
             const int index = MatchArgumentIndex(arg);
             if (index == -1) {
                 error_reason_str_ = GetUnknownOptionMessage(arg);
-                error_reason_ = ErrorReason::kUnknownOption;
                 return false;
             }
 
             // If the option is already provided, return an error.
             if (already_provided[index]) {
                 error_reason_str_ = GetMultipleOptionMessage(arg);
-                error_reason_ = ErrorReason::kMultipleOption;
                 return false;
             }
             already_provided[index] = true;
@@ -74,11 +72,9 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
             if (argument_settings_[index].need_value) {
                 if (i + 1 >= static_cast<int>(args.size())) {
                     error_reason_str_ = GetOptionNeedsArgumentMessage(arg);
-                    error_reason_ = ErrorReason::kOptionNeedsArgument;
                     return false;
                 } else if (utils::IsOption(args[i + 1])) {
                     error_reason_str_ = GetOptionNeedsArgumentMessage(arg);
-                    error_reason_ = ErrorReason::kOptionNeedsArgument;
                     return false;
                 }
 
@@ -91,7 +87,6 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
                 ++not_opt_arg_cnt;
             } else {
                 error_reason_str_ = GetUnknownArgumentMessage(arg);
-                error_reason_ = ErrorReason::kUnknownArgument;
                 return false;
             }
         }
@@ -126,7 +121,6 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) {
             error_reason_str_ = GetRequiredArgumentMessage();
             error_reason_str_ += "\n";
             error_reason_str_ += help_printer_.GetUsage();
-            error_reason_ = ErrorReason::kUnknownArgument;
             return false;
         }
     }
