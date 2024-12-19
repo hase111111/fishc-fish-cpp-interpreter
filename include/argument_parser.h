@@ -2,6 +2,7 @@
 #ifndef FISHC_ARGUMENT_PARSER_H_
 #define FISHC_ARGUMENT_PARSER_H_
 
+#include <cassert>
 #include <map>
 #include <string>
 #include <vector>
@@ -30,7 +31,7 @@ class ArgumentParser final {
         if (parsed_args_.count(name) == 0) { return T{}; }
 
         if (argument_settings_[name_to_idx_.at(name)].value_is_vector) {
-            return T{};
+            assert(false && "The argument is vector type.");
         }
 
         const auto &values = parsed_args_.at(name);
@@ -46,7 +47,7 @@ class ArgumentParser final {
         if (parsed_args_.count(name) == 0) { return std::vector<T>{}; }
 
         if (!argument_settings_[name_to_idx_.at(name)].value_is_vector) {
-            return std::vector<T>{};
+            assert(false && "The argument is not vector type.");
         }
 
         const auto &values = parsed_args_.at(name);
