@@ -71,7 +71,8 @@ std::vector<Argument> ArgumentInitializer::Initialize() const noexcept {
             string_argument,
             number_argument,
             version_argument,
-            play_animation_argument
+            play_animation_argument,
+            limit_argument
         };
 }
 
