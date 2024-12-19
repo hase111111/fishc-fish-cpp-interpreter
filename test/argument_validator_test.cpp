@@ -209,5 +209,63 @@ TEST_CASE("ArgumentValidator") {
             // Assert
             CHECK_EQ(result, true);
         }
+
+        SUBCASE("When argument need vector type value "
+           "and provided three value, Should return true") {
+            // Arrange
+            const auto arg1 = Argument{{"-h"}, "message"}
+                .IsOption()
+                .NeedValue("arg", Argument::Type::kVectorInt);
+            const auto arg2 = Argument{{"sample"}, "message"}
+                .NeedValue("arg", Argument::Type::kInt);
+            const auto arg3 = Argument{{"-t"}, "message"}
+                .IsOption();
+            ArgumentValidator validator({arg1, arg2, arg3});
+            Input argv = {"program_name", "-h", "1", "2", "3"};
+
+            // Act
+            const auto result = validator.Validate(argv);
+
+            // Assert
+            CHECK_EQ(result, true);
+
+            SUBCASE("Case when provided sample -h 1 2 3") {
+                // Arrange
+                Input argv = {"program_name", "sample", "-h", "1", "2", "3"};
+
+                // Act
+                const auto result = validator.Validate(argv);
+
+                // Assert
+                CHECK_EQ(result, true);
+            }
+
+            SUBCASE("Case when provided -h 1 2 3 -t") {
+                // Arrange
+                Input argv = {"program_name", "-h", "1", "2", "3", "-t"};
+
+                // Act
+                const auto result = validator.Validate(argv);
+
+                // Assert
+                CHECK_EQ(result, true);
+            }
+        }
+
+        SUBCASE("When argument need not vector type value "
+           "and provided three value, Should return false") {
+            // Arrange
+            const auto arg = Argument{{"-h"}, "message"}
+                .IsOption()
+                .NeedValue("arg", Argument::Type::kString);
+            ArgumentValidator validator({arg});
+            Input argv = {"program_name", "-h", "1", "2", "3"};
+
+            // Act
+            const auto result = validator.Validate(argv);
+
+            // Assert
+            CHECK_EQ(result, false);
+        }
     }
 }

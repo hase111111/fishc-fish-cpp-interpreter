@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 
+#include "argument.h"
 #include "utils.h"
 
 namespace fishc::internal {
@@ -83,7 +84,15 @@ bool ArgumentValidator::Validate(const std::vector<std::string>& args) noexcept 
                     return false;
                 }
 
-                ++i;
+                if (Argument::IsVectorType(argument_settings_[index].value_type)) {
+                    // If the argument is a vector, need to check the next arguments.
+                    ++i;
+                    while (i < static_cast<int>(args.size()) && !utils::IsOption(args[i])) {
+                        ++i;
+                    }
+                } else {
+                    ++i;
+                }
             }
         } else {
             if (not_opt_arg_cnt < static_cast<int>(not_opt_arg_idx.size())) {
