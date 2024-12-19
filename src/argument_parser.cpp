@@ -75,13 +75,4 @@ bool ArgumentParser::HasOption(const std::string &option) const noexcept {
     return false;
 }
 
-std::vector<std::string> ArgumentParser::ArgArrayToVector(
-    const int argc, char *argv[]) const {
-    std::vector<std::string> args;
-    for (int i = 0; i < argc; ++i) {
-        args.push_back(argv[i]);
-    }
-    return args;
-}
-
 }  // namespace fishc

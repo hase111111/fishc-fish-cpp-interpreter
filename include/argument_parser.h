@@ -39,9 +39,6 @@ class ArgumentParser final {
     }
 
  private:
-    [[nodiscard]]
-    std::vector<std::string> ArgArrayToVector(int argc, char *argv[]) const;
-    
     const std::vector<Argument> argument_settings_;
     std::vector<std::pair<bool, std::string>> parsed_args_;
 };
