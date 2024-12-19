@@ -1,6 +1,7 @@
 
 #include "type.h"
 
+#include <cmath>
 #include <stdexcept>
 
 namespace fishc {
@@ -103,6 +104,68 @@ Number operator/(const Number& a, const Number& b) {
     }
 
     return Number();
+}
+
+Number operator%(const Number& a, const Number& b) {
+    if (a.index() == 0 && b.index() == 0) {
+        ImplInt ia = std::get<ImplInt>(a);
+        ImplInt ib = std::get<ImplInt>(b);
+        if (ib == 0) {
+            throw std::runtime_error("Division by zero");
+        }
+        return static_cast<ImplInt>(ia % ib);
+    } else if (a.index() == 1 && b.index() == 1) {
+        ImplFloat fa = std::get<ImplFloat>(a);
+        ImplFloat fb = std::get<ImplFloat>(b);
+        if (fb == 0) {
+            throw std::runtime_error("Division by zero");
+        }
+        return static_cast<ImplFloat>(std::fmod(fa, fb));
+    } else if (a.index() == 0 && b.index() == 1) {
+        ImplInt ia = std::get<ImplInt>(a);
+        ImplFloat fb = std::get<ImplFloat>(b);
+        if (fb == 0) {
+            throw std::runtime_error("Division by zero");
+        }
+        return static_cast<ImplFloat>(std::fmod(ia, fb));
+    } else if (a.index() == 1 && b.index() == 0) {
+        ImplFloat fa = std::get<ImplFloat>(a);
+        ImplInt ib = std::get<ImplInt>(b);
+        if (ib == 0) {
+            throw std::runtime_error("Division by zero");
+        }
+        return static_cast<ImplFloat>(std::fmod(fa, ib));
+    }
+
+    return Number();
+}
+
+bool operator==(const Number& a, const Number& b) noexcept {
+    if (a.index() == 0 && b.index() == 0) {
+        return std::get<ImplInt>(a) == std::get<ImplInt>(b);
+    } else if (a.index() == 1 && b.index() == 1) {
+        return std::get<ImplFloat>(a) == std::get<ImplFloat>(b);
+    } else if (a.index() == 0 && b.index() == 1) {
+        return static_cast<ImplFloat>(std::get<ImplInt>(a)) == std::get<ImplFloat>(b);
+    } else if (a.index() == 1 && b.index() == 0) {
+        return std::get<ImplFloat>(a) == static_cast<ImplFloat>(std::get<ImplInt>(b));
+    }
+
+    return false;
+}
+
+bool operator<(const Number& a, const Number& b) noexcept {
+    if (a.index() == 0 && b.index() == 0) {
+        return std::get<ImplInt>(a) < std::get<ImplInt>(b);
+    } else if (a.index() == 1 && b.index() == 1) {
+        return std::get<ImplFloat>(a) < std::get<ImplFloat>(b);
+    } else if (a.index() == 0 && b.index() == 1) {
+        return static_cast<ImplFloat>(std::get<ImplInt>(a)) < std::get<ImplFloat>(b);
+    } else if (a.index() == 1 && b.index() == 0) {
+        return std::get<ImplFloat>(a) < static_cast<ImplFloat>(std::get<ImplInt>(b));
+    }
+
+    return false;
 }
 
 }  // namespace fishc

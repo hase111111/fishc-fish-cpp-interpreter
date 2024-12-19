@@ -7,6 +7,7 @@ import glob
 import subprocess
 
 TEST_FISH_FILE_PATH = './test/fish_code'
+RESULT_FILE_PATH = TEST_FISH_FILE_PATH + '/result'
 
 def search_fish_files() -> List[str]:
     '''
@@ -60,9 +61,12 @@ def main() -> None:
     for fish_file in fish_files:
         file_name = file_path_to_name(fish_file)
         input_file_name = fish_file_name_to_input_file_name(file_name)
-        input_str = read_file_to_str(f"{TEST_FISH_FILE_PATH}/" + input_file_name)
+        try:
+            input_str = read_file_to_str(f"{RESULT_FILE_PATH}/" + input_file_name)
+        except FileNotFoundError:
+            input_str = ''
         output_file_name = fish_file_name_to_output_file_name(file_name)
-        output_str = read_file_to_str(f"{TEST_FISH_FILE_PATH}/" + output_file_name)
+        output_str = read_file_to_str(f"{RESULT_FILE_PATH}/" + output_file_name)
 
         # run the fish code
         res = subprocess.run(['./build/fishc', fish_file, "-l", "1000"],

@@ -3,6 +3,7 @@
 #define FISHC_INTERPRETER_H_
 
 #include <string>
+#include <random>
 
 #include "code_box.h"
 #include "type.h"
@@ -41,6 +42,8 @@ class Interpreter final {
     bool skip_{false};
     bool use_double_quote_{false};
     bool use_single_quote_{false};
+
+    std::mt19937 mt_;
 };
 
 }  // namespace fishc

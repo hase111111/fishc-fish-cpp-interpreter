@@ -44,6 +44,11 @@ inline Number ToIntIfPossible(const Number& n) noexcept {
     if (IsInt(n)) {
         return n;
     }
+
+    const ImplFloat f = std::get<ImplFloat>(n);
+    if (f == static_cast<ImplFloat>(static_cast<ImplInt>(f))) {
+        return static_cast<ImplInt>(f);
+    }
     return static_cast<ImplInt>(std::get<ImplFloat>(n));
 }
 
@@ -56,6 +61,30 @@ inline Number ToIntIfPossible(const Number& n) noexcept {
 [[nodiscard]] Number operator/(const Number& a, const Number& b);
 
 [[nodiscard]] Number operator%(const Number& a, const Number& b);
+
+[[nodiscard]] bool operator==(const Number& a, const Number& b) noexcept;
+
+[[nodiscard]] 
+inline bool operator!=(const Number& a, const Number& b) noexcept {
+    return !(a == b);
+}
+
+[[nodiscard]] bool operator<(const Number& a, const Number& b) noexcept;
+
+[[nodiscard]]
+inline bool operator>(const Number& a, const Number& b) noexcept {
+    return b < a;
+}
+
+[[nodiscard]]
+inline bool operator<=(const Number& a, const Number& b) noexcept {
+    return !(b < a);
+}
+
+[[nodiscard]]
+inline bool operator>=(const Number& a, const Number& b) noexcept {
+    return !(a < b);
+}
 
 }  // namespace fishc
 
