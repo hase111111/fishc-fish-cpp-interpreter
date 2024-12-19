@@ -7,7 +7,8 @@
 
 namespace fishc {
 
-Argument::Argument(std::vector<std::string> names, std::string description) noexcept
+Argument::Argument(const std::vector<std::string>& names, 
+                   const std::string& description) noexcept
     : names(names)
     , description(description) {
     assert(!names.empty() && "The names must not be empty.");

@@ -17,14 +17,22 @@ struct Argument final {
     };
 
     Argument() = delete;
-    Argument(std::vector<std::string> names, std::string description) noexcept;
+    Argument(const std::vector<std::string>& names, 
+             const std::string& description) noexcept;
     ~Argument() = default;
     
     // Builder pattern
+    [[nodiscard]]
     Argument& NeedArgument(
         const std::string& argument_name, Type argument_type) noexcept;
+
+    [[nodiscard]]
     Argument& IsRequired(int required_group) noexcept;
+
+    [[nodiscard]]
     Argument& IsOption() noexcept;
+
+    [[nodiscard]]
     Argument& IsSpecial() noexcept;
 
     std::vector<std::string> names;  //!< example: {"-h", "--help"}
