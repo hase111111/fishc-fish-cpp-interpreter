@@ -5,6 +5,7 @@
 #include "argument_help_printer.h"
 #include "argument_initializer.h"
 #include "argument_parser.h"
+#include "argument_validator.h"
 #include "file_loader.h"
 #include "interpreter.h"
 #include "utils.h"
@@ -14,18 +15,27 @@ int main(int argc, char **argv) {
     // First, parse the command line arguments.
 
     const auto arg_vec = fishc::utils::ArgArrayToVector(argc, argv);
+    const auto argument_setting = fishc::ArgumentInitializer{}.Initialize();
+    auto arg_validator = fishc::ArgumentValidator{argument_setting};
 
-    const auto arguments = fishc::ArgumentInitializer{}.Initialize();
-    auto arg_parser = fishc::ArgumentParser{arguments};
-
-    if (!arg_parser.Parse(arg_vec)) {
+    if (!arg_validator.Validate(arg_vec)) {
         // If the command line arguments are invalid, exit the program.
+        std::cerr << "Error: " << arg_validator.GetErrorReasonString() << std::endl;
         return 1;
     }
 
+    auto arg_parser = fishc::ArgumentParser{argument_setting};
+
+    if (!arg_parser.Parse(arg_vec)) {
+        // If parsing fails, exit the program.
+        return 1;
+    }
+
+    // Parse is successful, so check if the user requested help or version.
+
     if (arg_parser.HasOption("--help")) {
         // If the user requested help, print the help message and exit.
-        fishc::ArgumentHelpPrinter{arguments}.Print();
+        fishc::ArgumentHelpPrinter{argument_setting}.Print();
         return 0;
     }
 

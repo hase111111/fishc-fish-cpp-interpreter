@@ -1,8 +1,6 @@
 
 #include "argument_parser.h"
 
-#include <iostream>
-
 #include "argument.h"
 #include "utils.h"
 
@@ -10,21 +8,10 @@ namespace fishc {
 
 ArgumentParser::ArgumentParser(
     const std::vector<Argument> &argument_settings) noexcept
-    : argument_settings_(argument_settings)
-    , argument_validator_{argument_settings} {
+    : argument_settings_(argument_settings) {
 }
 
 bool ArgumentParser::Parse(const std::vector<std::string>& args) noexcept {
-    // Validate the arguments.
-    if (!argument_validator_.Validate(args)) {
-        std::cout << "Invalid arguments: " 
-            << argument_validator_.GetErrorReasonString()
-            << std::endl;
-        return false;
-    }
-
-    // If the arguments are valid, parse them.
-
     // First reset the parsed arguments.
     parsed_args_.clear();
     for (int i = 0; i < static_cast<int>(argument_settings_.size()); ++i) {

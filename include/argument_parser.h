@@ -6,7 +6,6 @@
 #include <vector>
 
 #include "argument.h"
-#include "argument_validator.h"
 #include "utils.h"
 
 namespace fishc {
@@ -44,7 +43,6 @@ class ArgumentParser final {
     std::vector<std::string> ArgArrayToVector(int argc, char *argv[]) const;
     
     const std::vector<Argument> argument_settings_;
-    ArgumentValidator argument_validator_;
     std::vector<std::pair<bool, std::string>> parsed_args_;
 };
 
