@@ -154,5 +154,39 @@ TEST_CASE("ArgumentParser") {
             // Assert
             CHECK_EQ(result, std::vector<int>{1, 2, 3});
         }
+
+        SUBCASE("When there is vector float type argument and provide 1.1 2.2 3.3, "
+            "Should return {1.1, 2.2, 3.3}") {
+            // Arrange
+            const auto arg = Argument{{"-h"}, "message"}
+                .IsOption()
+                .NeedValue("arg", Argument::Type::kFloat, true);
+            ArgumentParser parser({arg});
+            Input args = {"program_name", "-h", "1.1", "2.2", "3.3"};
+            parser.Parse(args);
+
+            // Act
+            const auto result = parser.GetOptionValueVector<float>("-h");
+
+            // Assert
+            CHECK_EQ(result, std::vector<float>{1.1f, 2.2f, 3.3f});
+        }
+
+        SUBCASE("When there is vector string type argument and provide 'a' 'b' 'c', "
+            "Should return {'a', 'b', 'c'}") {
+            // Arrange
+            const auto arg = Argument{{"-h"}, "message"}
+                .IsOption()
+                .NeedValue("arg", Argument::Type::kString, true);
+            ArgumentParser parser({arg});
+            Input args = {"program_name", "-h", "a", "b", "c"};
+            parser.Parse(args);
+
+            // Act
+            const auto result = parser.GetOptionValueVector<std::string>("-h");
+
+            // Assert
+            CHECK_EQ(result, std::vector<std::string>{"a", "b", "c"});
+        }
     }
 }
