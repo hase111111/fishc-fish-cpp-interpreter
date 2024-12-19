@@ -13,6 +13,7 @@ struct Argument final {
         kInt,
         kFloat,
         kString,
+        kVectorInt,
     };
 
     Argument() = delete;
