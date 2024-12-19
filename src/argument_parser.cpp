@@ -14,9 +14,7 @@ ArgumentParser::ArgumentParser(
     , argument_validator_{argument_settings} {
 }
 
-bool ArgumentParser::Parse(int argc, char **argv) noexcept {
-    const auto args = ArgArrayToVector(argc, argv);
-
+bool ArgumentParser::Parse(const std::vector<std::string>& args) noexcept {
     // Validate the arguments.
     if (!argument_validator_.Validate(args)) {
         std::cout << "Invalid arguments: " 

@@ -10,6 +10,7 @@
 TEST_CASE("ArgumentParser") {
     using fishc::Argument;
     using fishc::ArgumentParser;
+    using Input = std::vector<std::string>;
 
     // It may be redundant because it overlaps with ArgumentValidator.
     SUBCASE("Parse") {
@@ -17,11 +18,10 @@ TEST_CASE("ArgumentParser") {
             // Arrange
             const auto arg = Argument{{"-h", "--help"}, "message"}.IsOption();
             ArgumentParser parser({arg});
-            int argc = 1;
-            char* argv[] = {(char*)"program_name"};
+            Input args = {"program_name"};
 
             // Act
-            const auto result = parser.Parse(argc, argv);
+            const auto result = parser.Parse(args);
 
             // Assert
             CHECK_EQ(result, true);
@@ -31,11 +31,10 @@ TEST_CASE("ArgumentParser") {
             // Arrange
             const auto arg = Argument{{"-h", "--help"}, "message"}.IsOption();
             ArgumentParser parser({arg});
-            int argc = 2;
-            char* argv[] = {(char*)"program_name", (char*)"--invalid"};
+            Input args = {"program_name", "--invalid"};
 
             // Act
-            const auto result = parser.Parse(argc, argv);
+            const auto result = parser.Parse(args);
 
             // Assert
             CHECK_EQ(result, false);
@@ -47,11 +46,10 @@ TEST_CASE("ArgumentParser") {
                 .IsOption()
                 .IsRequired(1);
             ArgumentParser parser({arg});
-            int argc = 1;
-            char* argv[] = {(char*)"program_name"};
+            Input args = {"program_name"};
 
             // Act
-            const auto result = parser.Parse(argc, argv);
+            const auto result = parser.Parse(args);
 
             // Assert
             CHECK_EQ(result, false);
@@ -63,11 +61,10 @@ TEST_CASE("ArgumentParser") {
                 .IsOption()
                 .IsRequired(1);
             ArgumentParser parser({arg});
-            int argc = 2;
-            char* argv[] = {(char*)"program_name", (char*)"--help"};
+            Input args = {"program_name", "--help"};
 
             // Act
-            const auto result = parser.Parse(argc, argv);
+            const auto result = parser.Parse(args);
 
             // Assert
             CHECK_EQ(result, true);
@@ -81,11 +78,10 @@ TEST_CASE("ArgumentParser") {
                 .NeedValue("sample", Argument::Type::kString);
 
             ArgumentParser parser({arg});
-            int argc = 2;
-            char* argv[] = {(char*)"program_name", (char*)"--help"};
+            Input args = {"program_name", "--help"};
 
             // Act
-            const auto result = parser.Parse(argc, argv);
+            const auto result = parser.Parse(args);
 
             // Assert
             CHECK_EQ(result, false);
@@ -99,11 +95,10 @@ TEST_CASE("ArgumentParser") {
                 .NeedValue("sample", Argument::Type::kString);
 
             ArgumentParser parser({arg});
-            int argc = 3;
-            char* argv[] = {(char*)"program_name", (char*)"--help", (char*)"sample"};
+            Input args = {"program_name", "--help", "sample"};
 
             // Act
-            const auto result = parser.Parse(argc, argv);
+            const auto result = parser.Parse(args);
 
             // Assert
             CHECK_EQ(result, true);
@@ -115,9 +110,8 @@ TEST_CASE("ArgumentParser") {
             // Arrange1
             const auto arg = Argument{{"-h"}, "message"}.IsOption();
             ArgumentParser parser({arg});
-            int argc = 1;
-            char* argv[] = {(char*)"program_name"};
-            parser.Parse(argc, argv);
+            Input args = {"program_name"};
+            parser.Parse(args);
 
             // Act1
             const auto result = parser.HasOption("-h");
@@ -130,9 +124,8 @@ TEST_CASE("ArgumentParser") {
             // Arrange
             const auto arg = Argument{{"-h"}, "message"}.IsOption();
             ArgumentParser parser({arg});
-            int argc = 2;
-            char* argv[] = {(char*)"program_name", (char*)"-h"};
-            parser.Parse(argc, argv);
+            Input args = {"program_name", "-h"};
+            parser.Parse(args);
 
             // Act
             const auto result = parser.HasOption("-h");
@@ -145,9 +138,8 @@ TEST_CASE("ArgumentParser") {
             // Arrange
             const auto arg = Argument{{"-h"}, "message"}.IsOption();
             ArgumentParser parser({arg});
-            int argc = 2;
-            char* argv[] = {(char*)"program_name", (char*)"-h"};
-            parser.Parse(argc, argv);
+            Input args = {"program_name", "-h"};
+            parser.Parse(args);
 
             // Act
             const auto result = parser.HasOption("--help");
@@ -162,9 +154,8 @@ TEST_CASE("ArgumentParser") {
             const auto arg = Argument{{"-h", "--help"}, "message"}
                 .IsOption();
             ArgumentParser parser({arg});
-            int argc = 2;
-            char* argv[] = {(char*)"program_name", (char*)"-h"};
-            parser.Parse(argc, argv);
+            Input args = {"program_name", "-h"};
+            parser.Parse(args);
 
             // Act
             const auto result = parser.HasOption("--help");

@@ -7,15 +7,18 @@
 #include "argument_parser.h"
 #include "file_loader.h"
 #include "interpreter.h"
+#include "utils.h"
 #include "version.h"
 
 int main(int argc, char **argv) {
     // First, parse the command line arguments.
 
+    const auto arg_vec = fishc::utils::ArgArrayToVector(argc, argv);
+
     const auto arguments = fishc::ArgumentInitializer{}.Initialize();
     auto arg_parser = fishc::ArgumentParser{arguments};
 
-    if (!arg_parser.Parse(argc, argv)) {
+    if (!arg_parser.Parse(arg_vec)) {
         // If the command line arguments are invalid, exit the program.
         return 1;
     }

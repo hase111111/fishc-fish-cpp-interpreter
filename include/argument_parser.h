@@ -18,7 +18,7 @@ class ArgumentParser final {
 
     ~ArgumentParser() = default;
 
-    bool Parse(int argc, char **argv) noexcept;
+    bool Parse(const std::vector<std::string>& args) noexcept;
 
     [[nodiscard]]
     bool HasOption(const std::string &option) const noexcept;

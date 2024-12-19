@@ -2,9 +2,11 @@
 #ifndef FISHC_UTILS_H_
 #define FISHC_UTILS_H_
 
+#include <cassert>
 #include <stdexcept>
 #include <string>
 #include <sstream>
+#include <vector>
 
 namespace fishc::utils {
 
@@ -39,6 +41,21 @@ template<typename T>
     std::stringstream ss(str);
     ss >> value;
     return value;
+}
+
+[[nodiscard]]
+inline std::vector<std::string> ArgArrayToVector(
+    const int argc, char **argv) noexcept {
+    assert(argc >= 0 && "argc must be non-negative");
+    assert(argv != nullptr && "argv must not be null");
+        
+    std::vector<std::string> args;
+
+    for (int i = 0; i < argc; ++i) {
+        args.push_back(argv[i]);
+    }
+
+    return args;
 }
 
 }  // namespace fishc::utils
