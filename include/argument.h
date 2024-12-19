@@ -21,7 +21,8 @@ struct Argument final {
              const std::string& description) noexcept;
     ~Argument() = default;
     
-    // Builder pattern
+    // Builder Pattern for Argument.
+
     [[nodiscard]]
     Argument& NeedArgument(
         const std::string& argument_name, Type argument_type) noexcept;
@@ -34,6 +35,8 @@ struct Argument final {
 
     [[nodiscard]]
     Argument& IsSpecial() noexcept;
+
+    // Variables.
 
     std::vector<std::string> names;  //!< example: {"-h", "--help"}
     std::string description;         //!< example: "Show help message"
