@@ -7,6 +7,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} --coverage")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+
 # Set Warning Level to Maximum
 if(MSVC)
     add_compile_options(/W4)
@@ -28,6 +31,9 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(doctest)
 
 add_executable(fishc_test ${SOURCES})
+
+# Add src directory to the project
+target_sources(fishc_test PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
 # Include the include directory
 target_include_directories(fishc_test PRIVATE ${PROJECT_SOURCE_DIR}/include)

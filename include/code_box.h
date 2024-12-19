@@ -19,10 +19,9 @@ class CodeBox final {
     inline int GetMaxWidth() const noexcept { return max_width_; }
     inline int GetMaxHeight() const noexcept { return max_height_; }
 
-    inline Number GetChar(int x, int y) const noexcept {
+    inline Number GetChar(const int x, const int y) const noexcept {
         if (x < 0 || x >= max_width_ || y < 0 || y >= max_height_) {
-            Number n = static_cast<ImplInt>(0);
-            return n;
+            return default_char_;
         }
         return code_box_[y][x]; 
     }
@@ -37,6 +36,7 @@ class CodeBox final {
 
     int max_width_{0};
     int max_height_{0};
+    const Number default_char_{static_cast<ImplInt>(0)};
 };
 
 }  // namespace fihsc

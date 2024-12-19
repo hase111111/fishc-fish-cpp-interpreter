@@ -7,6 +7,11 @@
 namespace fishc {
 
 CodeBox::CodeBox(const std::string& code) {
+    // if code is empty, return.
+    if (code.empty()) {
+        return;
+    }
+
     // Split the code into lines.
     std::vector<std::string> lines;
     std::string line;
@@ -41,7 +46,7 @@ CodeBox::CodeBox(const std::string& code) {
                 Number n = static_cast<ImplInt>(lines[y][x]);
                 code_box_[y][x] = n;
             } else {
-                code_box_[y][x] = static_cast<ImplInt>(0);
+                code_box_[y][x] = default_char_;
             }
         }
     }
@@ -121,13 +126,13 @@ void CodeBox::ReserveCodeBox(int width, int height) {
     // Fill the code box.
     for (int y = height; y < temp_height; y++) {
         for (int x = 0; x < temp_width; x++) {
-            code_box_[y][x] = static_cast<ImplInt>(0);
+            code_box_[y][x] = default_char_;
         }
     }
 
     for (int y = 0; y < max_height_; y++) {
         for (int x = width; x < temp_width; x++) {
-            code_box_[y][x] = static_cast<ImplInt>(0);
+            code_box_[y][x] = default_char_;
         }
     }
 }
