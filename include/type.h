@@ -8,15 +8,18 @@
 
 #include <cassert>
 #include <deque>
+#include <iostream>
 #include <optional>
+#include <ostream>
 #include <variant>
+#include <vector>
 
 namespace fishc {
 
 using ImplInt = long long;
 using ImplFloat = double;
 using Number = std::variant<ImplInt, ImplFloat>;
-using Stack = std::deque<Number>;
+using Stack = std::vector<std::deque<Number>>;
 using Register = std::optional<Number>;
 
 inline bool IsInt(const Number& n) noexcept {
@@ -89,6 +92,8 @@ inline bool operator<=(const Number& a, const Number& b) noexcept {
 inline bool operator>=(const Number& a, const Number& b) noexcept {
     return !(a < b);
 }
+
+std::ostream& operator<<(std::ostream& os, const Number& n);
 
 }  // namespace fishc
 

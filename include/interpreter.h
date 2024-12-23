@@ -6,22 +6,16 @@
 #ifndef FISHC_INTERPRETER_H_
 #define FISHC_INTERPRETER_H_
 
+#include <memory>
 #include <string>
-#include <random>
 
-#include "code_box.h"
+#include "fish_resource.h"
+#include "instruction_handler.h"
 #include "type.h"
 
 namespace fishc {
 
 class Interpreter final {
-    enum class Direction {
-        kRight,
-        kLeft,
-        kUp,
-        kDown,
-    };
-    
   public:
     Interpreter() = delete;
     Interpreter(const std::string& code);
@@ -33,21 +27,12 @@ class Interpreter final {
     bool Loop();  //!< Return true if the loop should continue.
     void Move();
     [[nodiscard]] char CodeToChar(Number code) const;
-    bool HandleInstruction(char ch);
 
     //! Return true if the string mode should continue.
     bool StringMode(Number code);
 
-    CodeBox code_box_;
-    Stack stack_;
-    Register register_;
-    int x_{0}, y_{0};
-    Direction direction_{Direction::kRight};
-    bool skip_{false};
-    bool use_double_quote_{false};
-    bool use_single_quote_{false};
-
-    std::mt19937 mt_;
+    const std::shared_ptr<FishResource> fish_resource_ptr_;
+    InstructionHandler instruction_handler_;
 };
 
 }  // namespace fishc

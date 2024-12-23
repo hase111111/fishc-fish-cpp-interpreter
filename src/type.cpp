@@ -2,6 +2,7 @@
 #include "type.h"
 
 #include <cmath>
+#include <ostream>
 #include <stdexcept>
 
 namespace fishc {
@@ -166,6 +167,16 @@ bool operator<(const Number& a, const Number& b) noexcept {
     }
 
     return false;
+}
+
+std::ostream& operator<<(std::ostream& os, const Number& n) {
+    if (n.index() == 0) {
+        os << std::get<ImplInt>(n);
+    } else if (n.index() == 1) {
+        os << std::get<ImplFloat>(n);
+    }
+
+    return os;
 }
 
 }  // namespace fishc
