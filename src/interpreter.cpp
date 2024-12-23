@@ -6,6 +6,7 @@
 #include <stdexcept>
 
 #include "code_box.h"
+#include "exception.h"
 #include "fish_resource.h"
 #include "type.h"
 
@@ -23,12 +24,16 @@ void Interpreter::Run() {
             if (!Loop()) {
                 break;
             }
-        } catch (const std::exception& _) {
+        } catch (const base_fish_exception& _) {
             // If an exception is thrown,
             // print the error message and exit the program.
             // No matter what error occurs, there is only one error message.
             std::cout << "Something smells fishy..." << std::endl;
             std::cout << "Error: " << _.what() << std::endl;
+            break;
+        } catch (const std::exception& e) {
+            std::cout << "Something smells fishy..." << std::endl;
+            std::cout << "Unknown Error:" << e.what() << std::endl;
             break;
         }
 
@@ -58,7 +63,7 @@ bool Interpreter::Loop() {
     return instruction_handler_.Handle(ch);
 }
 
-void Interpreter::Move() {
+void Interpreter::Move() noexcept {
     switch (fish_resource_ptr_->direction_) {
         case FishResource::Direction::kRight: {
             fish_resource_ptr_->x_++;

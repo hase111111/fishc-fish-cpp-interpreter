@@ -25,7 +25,7 @@ class Interpreter final {
 
   private:
     bool Loop();  //!< Return true if the loop should continue.
-    void Move();
+    void Move() noexcept;
     [[nodiscard]] char CodeToChar(Number code) const;
 
     //! Return true if the string mode should continue.
