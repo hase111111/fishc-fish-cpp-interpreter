@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
 
     if (!arg_validator.Validate(arg_vec)) {
         // If the command line arguments are invalid, exit the program.
-        std::cerr << "Error: " << arg_validator.GetErrorReasonString() << std::endl;
+        std::cout << "Error: " << arg_validator.GetErrorReasonString() << std::endl;
         return 1;
     }
 
