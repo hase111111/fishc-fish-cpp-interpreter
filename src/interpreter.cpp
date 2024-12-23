@@ -42,9 +42,11 @@ bool Interpreter::Loop() {
         return true;
     }
 
-    Number c = fish_resource_ptr_->code_box_.GetChar(fish_resource_ptr_->x_, fish_resource_ptr_->y_);
+    const Number c = fish_resource_ptr_->code_box_
+        .GetChar(fish_resource_ptr_->x_, fish_resource_ptr_->y_);
 
-    if (fish_resource_ptr_->use_double_quote_ || fish_resource_ptr_->use_single_quote_) {
+    if (fish_resource_ptr_->use_double_quote_ 
+        || fish_resource_ptr_->use_single_quote_) {
         if (!StringMode(c)) {
             fish_resource_ptr_->use_double_quote_ = false;
             fish_resource_ptr_->use_single_quote_ = false;
