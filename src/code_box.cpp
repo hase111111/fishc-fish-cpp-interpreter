@@ -55,6 +55,22 @@ CodeBox::CodeBox(const std::string& code) {
     ReserveCodeBox(max_width_, max_height_);
 }
 
+bool CodeBox::operator==(const CodeBox& rhs) const noexcept {
+    if (max_width_ != rhs.max_width_ || max_height_ != rhs.max_height_) {
+        return false;
+    }
+
+    for (int y = 0; y < max_height_; y++) {
+        for (int x = 0; x < max_width_; x++) {
+            if (code_box_[y][x] != rhs.code_box_[y][x]) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 void CodeBox::SetChar(int x, int y, Number c) {
     if (x < 0 || y < 0) {
         throw std::runtime_error("CodeBox::SetChar: x or y is less than 0.");

@@ -20,6 +20,9 @@ class CodeBox final {
     CodeBox(const std::string& code);
     ~CodeBox() = default;
 
+    // comparison operators
+    bool operator==(const CodeBox& rhs) const noexcept;
+
     inline int GetMaxWidth() const noexcept { return max_width_; }
     inline int GetMaxHeight() const noexcept { return max_height_; }
 
