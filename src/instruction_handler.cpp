@@ -271,53 +271,65 @@ bool InstructionHandler::Handle(const char ch) {
 void InstructionHandler::Mirror(const char ch) {
     using Dir = FishResource::Direction;
 
-    if (ch == '/') {
-        if (fish_resource_ptr_->direction_ == Dir::kRight) {
-            fish_resource_ptr_->direction_ = Dir::kUp;
-        } else if (fish_resource_ptr_->direction_ == Dir::kLeft) {
-            fish_resource_ptr_->direction_ = Dir::kDown;
-        } else if (fish_resource_ptr_->direction_ == Dir::kUp) {
-            fish_resource_ptr_->direction_ = Dir::kRight;
-        } else if (fish_resource_ptr_->direction_ == Dir::kDown) {
-            fish_resource_ptr_->direction_ = Dir::kLeft;
+    switch (ch) {
+        case '/': {
+            if (fish_resource_ptr_->direction_ == Dir::kRight) {
+                fish_resource_ptr_->direction_ = Dir::kUp;
+            } else if (fish_resource_ptr_->direction_ == Dir::kLeft) {
+                fish_resource_ptr_->direction_ = Dir::kDown;
+            } else if (fish_resource_ptr_->direction_ == Dir::kUp) {
+                fish_resource_ptr_->direction_ = Dir::kRight;
+            } else if (fish_resource_ptr_->direction_ == Dir::kDown) {
+                fish_resource_ptr_->direction_ = Dir::kLeft;
+            }
+            break;
         }
-    } else if (ch == '\\') {
-        if (fish_resource_ptr_->direction_ == Dir::kRight) {
-            fish_resource_ptr_->direction_ = Dir::kDown;
-        } else if (fish_resource_ptr_->direction_ == Dir::kLeft) {
-            fish_resource_ptr_->direction_ = Dir::kUp;
-        } else if (fish_resource_ptr_->direction_ == Dir::kUp) {
-            fish_resource_ptr_->direction_ = Dir::kLeft;
-        } else if (fish_resource_ptr_->direction_ == Dir::kDown) {
-            fish_resource_ptr_->direction_ = Dir::kRight;
+        case '\\': {
+            if (fish_resource_ptr_->direction_ == Dir::kRight) {
+                fish_resource_ptr_->direction_ = Dir::kDown;
+            } else if (fish_resource_ptr_->direction_ == Dir::kLeft) {
+                fish_resource_ptr_->direction_ = Dir::kUp;
+            } else if (fish_resource_ptr_->direction_ == Dir::kUp) {
+                fish_resource_ptr_->direction_ = Dir::kLeft;
+            } else if (fish_resource_ptr_->direction_ == Dir::kDown) {
+                fish_resource_ptr_->direction_ = Dir::kRight;
+            }
+            break;
         }
-    } else if (ch == '|') {
-        if (fish_resource_ptr_->direction_ == Dir::kLeft 
-            || fish_resource_ptr_->direction_ == Dir::kRight) {
-            fish_resource_ptr_->direction_ = 
-                (fish_resource_ptr_->direction_ == Dir::kLeft) ? 
-                    Dir::kRight : Dir::kLeft;
+        case '|': {
+            if (fish_resource_ptr_->direction_ == Dir::kLeft 
+                || fish_resource_ptr_->direction_ == Dir::kRight) {
+                fish_resource_ptr_->direction_ = 
+                    (fish_resource_ptr_->direction_ == Dir::kLeft) ?
+                        Dir::kRight : Dir::kLeft;
+            }
+            break;
         }
-    } else if (ch == '_') {
-        if (fish_resource_ptr_->direction_ == Dir::kUp 
-            || fish_resource_ptr_->direction_ == Dir::kDown) {
-            fish_resource_ptr_->direction_ = 
-                (fish_resource_ptr_->direction_ == Dir::kUp) ? 
-                    Dir::kDown : Dir::kUp;
+        case '_': {
+            if (fish_resource_ptr_->direction_ == Dir::kUp 
+                || fish_resource_ptr_->direction_ == Dir::kDown) {
+                fish_resource_ptr_->direction_ = 
+                    (fish_resource_ptr_->direction_ == Dir::kUp) ? 
+                        Dir::kDown : Dir::kUp;
+            }
+            break;
         }
-    } else if (ch == '#') {
-        if (fish_resource_ptr_->direction_ == Dir::kRight) {
-            fish_resource_ptr_->direction_ = Dir::kLeft;
-        } else if (fish_resource_ptr_->direction_ == Dir::kLeft) {
-            fish_resource_ptr_->direction_ = Dir::kRight;
-        } else if (fish_resource_ptr_->direction_ == Dir::kUp) {
-            fish_resource_ptr_->direction_ = Dir::kDown;
-        } else if (fish_resource_ptr_->direction_ == Dir::kDown) {
-            fish_resource_ptr_->direction_ = Dir::kUp;
+        case '#': {
+            if (fish_resource_ptr_->direction_ == Dir::kRight) {
+                fish_resource_ptr_->direction_ = Dir::kLeft;
+            } else if (fish_resource_ptr_->direction_ == Dir::kLeft) {
+                fish_resource_ptr_->direction_ = Dir::kRight;
+            } else if (fish_resource_ptr_->direction_ == Dir::kUp) {
+                fish_resource_ptr_->direction_ = Dir::kDown;
+            } else if (fish_resource_ptr_->direction_ == Dir::kDown) {
+                fish_resource_ptr_->direction_ = Dir::kUp;
+            }
+            break;
+        }
+        default: {
+            assert(false && "unknown character");
         }
     }
-
-    assert(false && "unknown character");
 }
 
 void InstructionHandler::ConditionalTrampoline() {
