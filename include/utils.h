@@ -1,4 +1,8 @@
 
+// Copyright (c) 2024-2025 T.Hasegawa
+// Released under the MIT license
+// https://opensource.org/licenses/mit-license.php
+
 #ifndef FISHC_UTILS_H_
 #define FISHC_UTILS_H_
 
@@ -43,12 +47,16 @@ template<typename T>
     return value;
 }
 
+//! @brief Convert the given argument array to a vector of strings.
+//! @param argc The number of arguments.
+//! @param argv The argument array. Array length must be argc.
+//! @return A vector of strings.
 [[nodiscard]]
 inline std::vector<std::string> ArgArrayToVector(
     const int argc, char **argv) noexcept {
     assert(argc >= 0 && "argc must be non-negative");
     assert(argv != nullptr && "argv must not be null");
-        
+
     std::vector<std::string> args;
 
     for (int i = 0; i < argc; ++i) {

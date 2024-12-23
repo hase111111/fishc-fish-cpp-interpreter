@@ -1,4 +1,8 @@
 
+// Copyright (c) 2024-2025 T.Hasegawa
+// Released under the MIT license
+// https://opensource.org/licenses/mit-license.php
+
 #ifndef FISHC_OPTION_H_
 #define FISHC_OPTION_H_
 
