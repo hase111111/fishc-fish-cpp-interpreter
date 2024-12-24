@@ -31,11 +31,19 @@ void Interpreter::Run() {
             // print the error message and exit the program.
             // No matter what error occurs, there is only one error message.
             std::cout << "Something smells fishy..." << std::endl;
-            std::cout << "Error: " << _.what() << std::endl;
+
+            if (debug_) {
+                std::cout << "Error: " << _.what() << std::endl;
+            }
+
             break;
         } catch (const std::exception& e) {
             std::cout << "Something smells fishy..." << std::endl;
-            std::cout << "Unknown Error:" << e.what() << std::endl;
+
+            if (debug_) {
+                std::cout << "Error: " << e.what() << std::endl;
+            }
+            
             break;
         }
 
