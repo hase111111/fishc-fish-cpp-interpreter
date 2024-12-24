@@ -39,6 +39,12 @@ void Interpreter::Run() {
         }
 
         Move();
+
+        if (limit_ > 0 && count_++ > limit_) {
+            std::cout << "Something smells fishy..." << std::endl;
+            std::cout << "Error: Limit exceeded." << std::endl;
+            break;
+        }
     }
 }
 

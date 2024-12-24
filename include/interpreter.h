@@ -34,6 +34,7 @@ class Interpreter final {
     const std::shared_ptr<FishResource> fish_resource_ptr_;
     InstructionHandler instruction_handler_;
     const int limit_;
+    int count_ = 0;
 };
 
 }  // namespace fishc
