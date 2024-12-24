@@ -12,10 +12,11 @@
 
 namespace fishc {
 
-Interpreter::Interpreter(const std::string& code, int limit)
+Interpreter::Interpreter(const std::string& code, int limit, bool debug)
     : fish_resource_ptr_(std::make_shared<FishResource>(code))
     , instruction_handler_(fish_resource_ptr_) 
-    , limit_(limit) {
+    , limit_(limit) 
+    , debug_(debug) {
     assert(fish_resource_ptr_ != nullptr && "fish_resource_ptr_ must not be null.");
 }
 

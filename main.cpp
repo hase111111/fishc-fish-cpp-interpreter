@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
         limit = arg_parser.GetOptionValue<int>("--limit");
     }
 
-    fishc::Interpreter interpreter(code, limit);
+    fishc::Interpreter interpreter(code, limit, false);
     interpreter.Run();
 
     return 0;

@@ -18,15 +18,19 @@ namespace fishc {
 class Interpreter final {
   public:
     Interpreter() = delete;
-    Interpreter(const std::string& code, int limit);
+    Interpreter(const std::string& code, int limit, bool debug);
     ~Interpreter() = default;
 
     void Run();
 
   private:
     bool Loop();  //!< Return true if the loop should continue.
+
+    //! Move instruction pointer.
     void Move() noexcept;
-    [[nodiscard]] char CodeToChar(Number code) const;
+
+    [[nodiscard]]
+    char CodeToChar(Number code) const;
 
     //! Return true if the string mode should continue.
     bool StringMode(Number code);
@@ -34,7 +38,8 @@ class Interpreter final {
     const std::shared_ptr<FishResource> fish_resource_ptr_;
     InstructionHandler instruction_handler_;
     const int limit_;
-    int count_ = 0;
+    int count_{ 0 };
+    const bool debug_{ false };
 };
 
 }  // namespace fishc
