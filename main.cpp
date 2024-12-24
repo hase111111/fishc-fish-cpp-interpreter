@@ -54,14 +54,19 @@ int main(int argc, char **argv) {
         std::string path = arg_parser.GetOptionValue<std::string>("script");
         fishc::FileLoader file_loader{path};
         if (!file_loader.IsOpen()) {
-            std::cerr << "Failed to open the file: " << path << std::endl;
+            std::cout << "Failed to open the file: " << path << std::endl;
             return 1;   
         }
 
         code = file_loader.GetFile();
     }
 
-    fishc::Interpreter interpreter(code);
+    int limit = -1;
+    if (arg_parser.HasOption("--limit")) {
+        limit = arg_parser.GetOptionValue<int>("--limit");
+    }
+
+    fishc::Interpreter interpreter(code, limit);
     interpreter.Run();
 
     return 0;

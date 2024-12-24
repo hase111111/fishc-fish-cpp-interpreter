@@ -18,7 +18,7 @@ namespace fishc {
 class Interpreter final {
   public:
     Interpreter() = delete;
-    Interpreter(const std::string& code);
+    Interpreter(const std::string& code, int limit);
     ~Interpreter() = default;
 
     void Run();
@@ -33,6 +33,7 @@ class Interpreter final {
 
     const std::shared_ptr<FishResource> fish_resource_ptr_;
     InstructionHandler instruction_handler_;
+    const int limit_;
 };
 
 }  // namespace fishc
