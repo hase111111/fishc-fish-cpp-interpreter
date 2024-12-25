@@ -31,7 +31,7 @@ Argument& Argument::NeedValue(
 }
 
 Argument& Argument::IsRequired(const int required_group) noexcept {
-    this->is_required = true;
+    this->is_required = false;
     this->required_group = required_group;
     return *this;
 }
