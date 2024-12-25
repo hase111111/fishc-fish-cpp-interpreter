@@ -46,7 +46,7 @@ def main() -> None:
     '''
     print('=' * 40)
     print('Now starting the test module.')
-    print('Searching fish files...')
+    print('Searching fish files.')
     fish_files = search_fish_files()
     print('fish file number:', len(fish_files))
     print('=' * 40)
@@ -71,6 +71,8 @@ def main() -> None:
         # run the fish code
         res = subprocess.run(['./build/fishc', fish_file, "-l", "100000000", "-d"],
             input=input_str, check=True, capture_output=True, text=True)
+        # res = subprocess.run(['python', 'bash/fish.py', fish_file],
+        #     input=input_str, check=True, capture_output=True, text=True)
 
         if res.stdout == output_str:
             success_num += 1
