@@ -62,6 +62,10 @@ std::vector<Argument> ArgumentInitializer::Initialize() const noexcept {
             .IsOption()
             .NeedValue("limit", Argument::Type::kInt);
 
+    const auto debug_argument = 
+        Argument{{"-d", "--debug"}, "Enable debug mode."}
+            .IsOption();
+
     return {
             script,
             code_argument,
@@ -72,7 +76,8 @@ std::vector<Argument> ArgumentInitializer::Initialize() const noexcept {
             number_argument,
             version_argument,
             play_animation_argument,
-            limit_argument
+            limit_argument,
+            debug_argument
         };
 }
 

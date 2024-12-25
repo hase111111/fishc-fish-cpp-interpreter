@@ -69,7 +69,7 @@ def main() -> None:
         output_str = read_file_to_str(f"{RESULT_FILE_PATH}/" + output_file_name)
 
         # run the fish code
-        res = subprocess.run(['./build/fishc', fish_file, "-l", "1000"],
+        res = subprocess.run(['./build/fishc', fish_file, "-l", "1000", "-d"],
             input=input_str, check=True, capture_output=True, text=True)
 
         if res.stdout == output_str:
