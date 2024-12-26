@@ -12,6 +12,9 @@
 #include "version.h"
 
 int main(int argc, char **argv) {
+    std::cin.tie(nullptr);
+    std::ios::sync_with_stdio(false);
+
     // First, parse the command line arguments.
 
     const auto arg_vec = fishc::utils::ArgArrayToVector(argc, argv);
@@ -28,7 +31,7 @@ int main(int argc, char **argv) {
 
     if (!arg_parser.Parse(arg_vec)) {
         // If parsing fails, exit the program.
-        return 1;
+        return 2;
     }
 
     // Parse is successful, so check if the user requested help or version.
@@ -55,7 +58,7 @@ int main(int argc, char **argv) {
         fishc::FileLoader file_loader{path};
         if (!file_loader.IsOpen()) {
             std::cout << "Failed to open the file: " << path << std::endl;
-            return 1;   
+            return 3;   
         }
 
         code = file_loader.GetFile();

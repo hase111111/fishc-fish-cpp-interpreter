@@ -2,6 +2,7 @@
 This is a test module.
 '''
 
+import time
 from typing import List
 import glob
 import subprocess
@@ -57,6 +58,8 @@ def main() -> None:
 
     test_num = len(fish_files)
     success_num = 0
+    max_time = 0.0
+    max_time_file = ''
 
     for fish_file in fish_files:
         file_name = file_path_to_name(fish_file)
@@ -68,14 +71,23 @@ def main() -> None:
         output_file_name = fish_file_name_to_output_file_name(file_name)
         output_str = read_file_to_str(f"{RESULT_FILE_PATH}/" + output_file_name)
 
+        # calc time
+        start = time.time()
+
         # run the fish code
         res = subprocess.run(['./build/fishc', fish_file, "-l", "100000000", "-d"],
             input=input_str, check=True, capture_output=True, text=True)
         # res = subprocess.run(['python', 'bash/fish.py', fish_file],
         #     input=input_str, check=True, capture_output=True, text=True)
 
+        end = time.time()
+
         if res.stdout == output_str:
             success_num += 1
+
+            if end - start > max_time:
+                max_time = end - start
+                max_time_file = file_name
         else:
             print('Test failed:', file_name)
 
@@ -97,8 +109,11 @@ def main() -> None:
     print(f'Test number: {test_num}')
     print(f'Success number: {success_num}')
     print(f'Failure number: {test_num - success_num}')
+    print(f'Max time: {max_time:.3f} sec ({max_time_file})')
     if success_num == test_num:
         print('All tests passed!')
+    elif success_num == 0:
+        print('All tests failed.')
     else:
         print('Some tests failed.')
     print('=' * 40)
