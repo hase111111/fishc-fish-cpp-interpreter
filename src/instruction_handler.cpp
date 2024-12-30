@@ -266,7 +266,7 @@ bool InstructionHandler::Handle(const char ch) {
         case '&': {
             if (fish_resource_ptr_->register_.has_value()) {
                 fish_resource_ptr_->stack_.back().push_back(fish_resource_ptr_->register_.value());
-                fish_resource_ptr_->register_.reset();
+                fish_resource_ptr_->register_ = std::nullopt;
             } else {
                 if (fish_resource_ptr_->stack_.back().empty()) {
                     throw stack_exception("call '&', but stack is empty.");
@@ -274,6 +274,39 @@ bool InstructionHandler::Handle(const char ch) {
 
                 fish_resource_ptr_->register_ = fish_resource_ptr_->stack_.back().back();
                 fish_resource_ptr_->stack_.back().pop_back();
+            }
+            return true;
+        }
+        case '[' : {
+            if (fish_resource_ptr_->stack_.back().empty()) {
+                throw stack_exception("call '[', but stack is empty.");
+            }
+
+            ImplInt i = GetIntOr(fish_resource_ptr_->stack_.back().back(), -1);
+
+            if (i < 0) {
+                throw invalid_argument_exception("Call '[', but i is negative.");
+            }
+
+            fish_resource_ptr_->stack_.push_back({});
+
+            for (int j = 0; j < i; ++j) {
+                Number n = fish_resource_ptr_->stack_[fish_resource_ptr_->stack_.size() - 2].back();
+                fish_resource_ptr_->stack_[fish_resource_ptr_->stack_.size() - 2].pop_back();
+                fish_resource_ptr_->stack_.back().push_back(n);
+            }
+            return true;
+        }
+        case ']' : {
+            if (fish_resource_ptr_->stack_.size() == 1) {
+                throw stack_exception("call ']', but stack size is 1.");
+            }
+
+            auto s = fish_resource_ptr_->stack_.back();
+            fish_resource_ptr_->stack_.pop_back();
+            
+            for (const auto& n : s) {
+                fish_resource_ptr_->stack_.back().push_back(n);
             }
             return true;
         }
