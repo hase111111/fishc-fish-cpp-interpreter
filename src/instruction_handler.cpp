@@ -212,46 +212,49 @@ bool InstructionHandler::Handle(const char ch) {
             }
             return true;
         }
-    //     // Reflection/miscellaneous
-    //     case 'g' : {
-    //         if (stack_.size() < 2) {
-    //             throw std::runtime_error("Interpreter::Loop: stack size is less than 2.");
-    //         }
+        // Reflection/miscellaneous
+        case 'g' : {
+            if (fish_resource_ptr_->stack_.back().size() < 2) {
+                throw stack_exception("call 'g', but stack size is less than 2.");
+            }
 
-    //         const ImplInt a = GetIntOr(stack_.back(), -1);
-    //         stack_.pop_back();
-    //         const ImplInt b = GetIntOr(stack_.back(), -1);
-    //         stack_.pop_back();
+            const Number a = ToIntIfPossible(fish_resource_ptr_->stack_.back().back());
+            fish_resource_ptr_->stack_.back().pop_back();
+            const Number b = ToIntIfPossible(fish_resource_ptr_->stack_.back().back());
+            fish_resource_ptr_->stack_.back().pop_back();
 
-    //         if (a < 0 || b < 0) {
-    //             throw std::runtime_error("Interpreter::Loop: a or b is negative.");
-    //         }
+            const auto x = GetIntOr(b, -1);
+            const auto y = GetIntOr(a, -1);
 
-    //         stack_.push_back(code_box_.GetChar(b, a));
-    //         break;
-    //     }
-    //     case 'p' : {
-    //         if (stack_.size() < 3) {
-    //             throw std::runtime_error("Interpreter::Loop: stack size is less than 3.");
-    //         }
+            if (x < 0 || y < 0) {
+                throw invalid_argument_exception("Call 'g', but x or y is negative.");
+            }
 
-    //         const Number a = stack_.back();
-    //         stack_.pop_back();
-    //         const Number b = stack_.back();
-    //         stack_.pop_back();
-    //         const Number c = stack_.back();
-    //         stack_.pop_back();
+            fish_resource_ptr_->stack_.back().push_back(fish_resource_ptr_->code_box_.GetChar(x, y));
+            return true;
+        }
+        case 'p' : {
+            if (fish_resource_ptr_->stack_.back().size() < 3) {
+                throw stack_exception("call 'p', but stack size is less than 3.");
+            }
 
-    //         const ImplInt x = GetIntOr(c, -1);
-    //         const ImplInt y = GetIntOr(b, -1);
+            const Number a = ToIntIfPossible(fish_resource_ptr_->stack_.back().back());
+            fish_resource_ptr_->stack_.back().pop_back();
+            const Number b = ToIntIfPossible(fish_resource_ptr_->stack_.back().back());
+            fish_resource_ptr_->stack_.back().pop_back();
+            const Number c = ToIntIfPossible(fish_resource_ptr_->stack_.back().back());
+            fish_resource_ptr_->stack_.back().pop_back();
 
-    //         if (x < 0 || y < 0) {
-    //             throw std::runtime_error("Interpreter::Loop: x or y is negative.");
-    //         }
+            const ImplInt x = GetIntOr(c, -1);
+            const ImplInt y = GetIntOr(b, -1);
 
-    //         code_box_.SetChar(x, y, a);
-    //         break;
-    //     }
+            if (x < 0 || y < 0) {
+                throw invalid_argument_exception("Call 'p', but x or y is negative.");
+            }
+
+            fish_resource_ptr_->code_box_.SetChar(x, y, a);
+            return true;
+        }
         case ';': {
             // exit the program.
             return false;
@@ -260,14 +263,28 @@ bool InstructionHandler::Handle(const char ch) {
             // no operation.
             return true;
         }
+        case '&': {
+            if (fish_resource_ptr_->register_.has_value()) {
+                fish_resource_ptr_->stack_.back().push_back(fish_resource_ptr_->register_.value());
+                fish_resource_ptr_->register_.reset();
+            } else {
+                if (fish_resource_ptr_->stack_.back().empty()) {
+                    throw stack_exception("call '&', but stack is empty.");
+                }
+
+                fish_resource_ptr_->register_ = fish_resource_ptr_->stack_.back().back();
+                fish_resource_ptr_->stack_.back().pop_back();
+            }
+            return true;
+        }
         default: {
             std::string message = "unknown character: "
-                + std::string(1, ch);
+                + std::string(1, ch) + " (" + std::to_string(static_cast<int>(ch)) + ")";
             throw invalid_instruction_exception(message);
         }
     }
 
-    return true;
+    return false;
 }
 
 void InstructionHandler::Mirror(const char ch) {
