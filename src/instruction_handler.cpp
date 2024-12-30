@@ -2,6 +2,7 @@
 #include "instruction_handler.h"
 
 #include <algorithm>
+#include <cstdio>
 #include <cassert>
 #include <iostream>
 #include <string>
@@ -203,6 +204,7 @@ bool InstructionHandler::Handle(const char ch) {
         }
         case 'i': {
             char c;
+
             if (std::cin.get(c)) {
                 fish_resource_ptr_->stack_.back().push_back(static_cast<ImplInt>(c));
             } else {

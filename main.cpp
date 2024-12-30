@@ -12,9 +12,6 @@
 #include "version.h"
 
 int main(int argc, char **argv) {
-    std::cin.tie(nullptr);
-    std::ios::sync_with_stdio(false);
-
     // First, parse the command line arguments.
 
     const auto arg_vec = fishc::utils::ArgArrayToVector(argc, argv);

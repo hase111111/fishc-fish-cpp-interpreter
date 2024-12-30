@@ -59,7 +59,9 @@ def main() -> None:
     test_num = len(fish_files)
     success_num = 0
     max_time = 0.0
+    max_success_time = 0.0
     max_time_file = ''
+    max_success_time_file = ''
 
     for fish_file in fish_files:
         file_name = file_path_to_name(fish_file)
@@ -79,15 +81,21 @@ def main() -> None:
             input=input_str, check=True, capture_output=True, text=True)
         # res = subprocess.run(['python', 'bash/fish.py', fish_file],
         #     input=input_str, check=True, capture_output=True, text=True)
+        # res = subprocess.run(['fishr', fish_file],
+        #     input=input_str, check=True, capture_output=True, text=True)
 
         end = time.time()
+
+        if end - start > max_time:
+            max_time = end - start
+            max_time_file = file_name
 
         if res.stdout == output_str:
             success_num += 1
 
-            if end - start > max_time:
-                max_time = end - start
-                max_time_file = file_name
+            if end - start > max_success_time:
+                max_success_time = end - start
+                max_success_time_file = file_name
         else:
             print('Test failed:', file_name)
 
@@ -95,13 +103,19 @@ def main() -> None:
             if output_str == '':
                 print('[No output]')
             else:
-                print(output_str)
+                if len(output_str) > 1000:
+                    print(output_str[:1000] + '...')
+                else:
+                    print(output_str)
 
             print('Actual:')
             if res.stdout == '':
                 print('[No output]')
             else:
-                print(res.stdout)
+                if len(res.stdout) > 1000:
+                    print(res.stdout[:1000] + '...')
+                else:
+                    print(res.stdout)
 
             print('-' * 40)
 
@@ -110,6 +124,7 @@ def main() -> None:
     print(f'Success number: {success_num}')
     print(f'Failure number: {test_num - success_num}')
     print(f'Max time: {max_time:.3f} sec ({max_time_file})')
+    print(f'Max success time: {max_success_time:.3f} sec ({max_success_time_file})')
     if success_num == test_num:
         print('All tests passed!')
     elif success_num == 0:
