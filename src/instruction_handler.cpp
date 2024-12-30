@@ -205,11 +205,19 @@ bool InstructionHandler::Handle(const char ch) {
         case 'i': {
             char c;
 
-            if (std::cin.get(c)) {
+            std::scanf("%c", &c);
+
+            if (c != EOF) {
                 fish_resource_ptr_->stack_.back().push_back(static_cast<ImplInt>(c));
             } else {
                 fish_resource_ptr_->stack_.back().push_back(static_cast<ImplInt>(-1));
             }
+
+            // if (std::cin.get(c)) {
+            //     fish_resource_ptr_->stack_.back().push_back(static_cast<ImplInt>(c));
+            // } else {
+            //     fish_resource_ptr_->stack_.back().push_back(static_cast<ImplInt>(-1));
+            // }
             return true;
         }
         // Reflection/miscellaneous
