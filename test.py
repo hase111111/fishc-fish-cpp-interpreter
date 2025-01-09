@@ -86,6 +86,11 @@ def main() -> None:
 
         end = time.time()
 
+        # If time is over 0.5 sec, warn
+        if end - start > 0.5:
+            print('Warning:', file_name, 'took', end - start, 'sec')
+            print('-' * 40)
+
         if end - start > max_time:
             max_time = end - start
             max_time_file = file_name
