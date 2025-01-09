@@ -205,19 +205,12 @@ bool InstructionHandler::Handle(const char ch) {
         case 'i': {
             char c;
 
-            std::scanf("%c", &c);
-
-            if (c != EOF) {
+            if (std::cin.get(c)) {
                 fish_resource_ptr_->stack_.back().push_back(static_cast<ImplInt>(c));
             } else {
                 fish_resource_ptr_->stack_.back().push_back(static_cast<ImplInt>(-1));
             }
 
-            // if (std::cin.get(c)) {
-            //     fish_resource_ptr_->stack_.back().push_back(static_cast<ImplInt>(c));
-            // } else {
-            //     fish_resource_ptr_->stack_.back().push_back(static_cast<ImplInt>(-1));
-            // }
             return true;
         }
         // Reflection/miscellaneous
@@ -291,18 +284,26 @@ bool InstructionHandler::Handle(const char ch) {
             }
 
             ImplInt i = GetIntOr(fish_resource_ptr_->stack_.back().back(), -1);
+            fish_resource_ptr_->stack_.back().pop_back();
 
             if (i < 0) {
                 throw invalid_argument_exception("Call '[', but i is negative.");
             }
 
-            fish_resource_ptr_->stack_.push_back({});
+            // スタックの後ろからi個分の要素を取り出して新しいスタックに積む.
+            std::deque<Number> s;
+            
+            for (ImplInt j = 0; j < i; ++j) {
+                if (fish_resource_ptr_->stack_.back().empty()) {
+                    throw stack_exception("call '[', but stack is empty.");
+                }
 
-            for (int j = 0; j < i; ++j) {
-                Number n = fish_resource_ptr_->stack_[fish_resource_ptr_->stack_.size() - 2].back();
-                fish_resource_ptr_->stack_[fish_resource_ptr_->stack_.size() - 2].pop_back();
-                fish_resource_ptr_->stack_.back().push_back(n);
+                s.push_front(fish_resource_ptr_->stack_.back().back());
+                fish_resource_ptr_->stack_.back().pop_back();
             }
+
+            fish_resource_ptr_->stack_.push_back(s);
+
             return true;
         }
         case ']' : {
