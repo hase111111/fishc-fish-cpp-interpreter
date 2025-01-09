@@ -6,6 +6,7 @@
 #include <cassert>
 #include <iostream>
 #include <string>
+#include <utility>
 
 #include "exception.h"
 #include "fish_resource.h"
@@ -118,13 +119,9 @@ bool InstructionHandler::Handle(const char ch) {
                 throw stack_exception("call '$', but stack size is less than 2.");
             }
 
-            Number a = fish_resource_ptr_->stack_.back().back();
-            fish_resource_ptr_->stack_.back().pop_back();
-            Number b = fish_resource_ptr_->stack_.back().back();
-            fish_resource_ptr_->stack_.back().pop_back();
-
-            fish_resource_ptr_->stack_.back().push_back(a);
-            fish_resource_ptr_->stack_.back().push_back(b);
+            const auto size = fish_resource_ptr_->stack_.back().size();
+            std::swap(fish_resource_ptr_->stack_.back()[size - 1],
+                fish_resource_ptr_->stack_.back()[size - 2]);
             return true;
         }
         case '@' : {
