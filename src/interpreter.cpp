@@ -35,10 +35,10 @@ void Interpreter::Run() {
             if (debug_) {
                 std::cout << "Error: " << _.what() << std::endl;
                 std::cout << "x: " << fish_resource_ptr_->x_ << ", y: " << fish_resource_ptr_->y_ << std::endl;
-                std::cout << "stack: ";
-                for (const auto& s : fish_resource_ptr_->stack_.back()) {
-                    std::cout << s << " ";
-                }
+                // std::cout << "stack: ";
+                // for (const auto& s : fish_resource_ptr_->stack_.back()) {
+                //     std::cout << s << " ";
+                // }
                 std::cout << std::endl;
                 std::cout << "step: " << count_ << std::endl; 
             }
@@ -145,7 +145,7 @@ bool Interpreter::StringMode(const Number code) {
         }
     }
 
-    fish_resource_ptr_->stack_.back().push_back(code);
+    fish_resource_ptr_->stack_.push_back(code);
 
     return true;
 }

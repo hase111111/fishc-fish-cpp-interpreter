@@ -1,12 +1,10 @@
 
 #include "instruction_handler.h"
 
-#include <algorithm>
 #include <cstdio>
 #include <cassert>
 #include <iostream>
 #include <string>
-#include <utility>
 
 #include "exception.h"
 #include "fish_resource.h"
@@ -22,8 +20,6 @@ InstructionHandler::InstructionHandler(const std::shared_ptr<FishResource> &fish
 
 bool InstructionHandler::Handle(const char ch) {
     using Dir = FishResource::Direction;
-
-    assert(!fish_resource_ptr_->stack_.empty() && "stack must not be empty.");
 
     switch (ch) {
         // Movement and execution
@@ -72,13 +68,11 @@ bool InstructionHandler::Handle(const char ch) {
         // Literals and operators
         case '0': case '1': case '2': case '3': case '4': case '5':
         case '6': case '7': case '8': case '9': {
-            fish_resource_ptr_->stack_.back()
-                .push_back(static_cast<ImplInt>(ch - '0'));
+            fish_resource_ptr_->stack_.push_back(static_cast<ImplInt>(ch - '0'));
             return true;
         }
         case 'a':  case 'b': case 'c': case 'd': case 'e': case 'f': {
-            fish_resource_ptr_->stack_.back()
-                .push_back(static_cast<ImplInt>(ch - 'a' + 10));
+            fish_resource_ptr_->stack_.push_back(static_cast<ImplInt>(ch - 'a' + 10));
             return true;
         }
         case '+': case '-': case '*': case ',': case '%': {
@@ -99,149 +93,136 @@ bool InstructionHandler::Handle(const char ch) {
         }
         // Stack manipulation
         case ':' : {
-            if (fish_resource_ptr_->stack_.back().empty()) {
+            if (fish_resource_ptr_->stack_.empty()) {
                 throw stack_exception("call ':', but stack is empty.");
             }
 
-            fish_resource_ptr_->stack_.back().push_back(fish_resource_ptr_->stack_.back().back());
+            fish_resource_ptr_->stack_.push_back(fish_resource_ptr_->stack_.back());
             return true;
         }
         case '~' : {
-            if (fish_resource_ptr_->stack_.back().empty()) {
+            if (fish_resource_ptr_->stack_.empty()) {
                 throw stack_exception("call '~', but stack is empty.");
             }
 
-            fish_resource_ptr_->stack_.back().pop_back();
+            const Number _ = fish_resource_ptr_->stack_.pop_back();
             return true;
         }
         case '$' : {
-            if (fish_resource_ptr_->stack_.back().size() < 2) {
+            if (fish_resource_ptr_->stack_.size() < 2) {
                 throw stack_exception("call '$', but stack size is less than 2.");
             }
 
-            const auto size = fish_resource_ptr_->stack_.back().size();
-            std::swap(fish_resource_ptr_->stack_.back()[size - 1],
-                fish_resource_ptr_->stack_.back()[size - 2]);
+            const Number s = fish_resource_ptr_->stack_.pop_back();
+            const Number t = fish_resource_ptr_->stack_.pop_back();
+            fish_resource_ptr_->stack_.push_back(s);
+            fish_resource_ptr_->stack_.push_back(t);
             return true;
         }
         case '@' : {
-            if (fish_resource_ptr_->stack_.back().size() < 3) {
+            if (fish_resource_ptr_->stack_.size() < 3) {
                 throw stack_exception("call '@', but stack size is less than 3.");
             }
 
-            const Number a = fish_resource_ptr_->stack_.back().back();
-            fish_resource_ptr_->stack_.back().pop_back();
-            const Number b = fish_resource_ptr_->stack_.back().back();
-            fish_resource_ptr_->stack_.back().pop_back();
-            const Number c = fish_resource_ptr_->stack_.back().back();
-            fish_resource_ptr_->stack_.back().pop_back();
-
-            fish_resource_ptr_->stack_.back().push_back(a);
-            fish_resource_ptr_->stack_.back().push_back(c);
-            fish_resource_ptr_->stack_.back().push_back(b);
+            const Number s = fish_resource_ptr_->stack_.pop_back();
+            const Number t = fish_resource_ptr_->stack_.pop_back();
+            const Number u = fish_resource_ptr_->stack_.pop_back();
+            fish_resource_ptr_->stack_.push_back(s);
+            fish_resource_ptr_->stack_.push_back(u);
+            fish_resource_ptr_->stack_.push_back(t);
             return true;
         }
         case '{' : {
             // left rotation.
-            if (fish_resource_ptr_->stack_.back().empty()) {
+            if (fish_resource_ptr_->stack_.empty()) {
                 throw stack_exception("call '{', but stack is empty.");
             }
 
-            const Number a = fish_resource_ptr_->stack_.back().front();
-            fish_resource_ptr_->stack_.back().pop_front();
-            fish_resource_ptr_->stack_.back().push_back(a);
+            const Number a = fish_resource_ptr_->stack_.pop_front();
+            fish_resource_ptr_->stack_.push_back(a);
             return true;
         }
         case '}' : {
             // right rotation.
-            if (fish_resource_ptr_->stack_.back().empty()) {
+            if (fish_resource_ptr_->stack_.empty()) {
                 throw stack_exception("call '}', but stack is empty.");
             }
 
-            const Number a = fish_resource_ptr_->stack_.back().back();
-            fish_resource_ptr_->stack_.back().pop_back();
-            fish_resource_ptr_->stack_.back().push_front(a);
+            const Number a = fish_resource_ptr_->stack_.pop_back();
+            fish_resource_ptr_->stack_.push_front(a);
             return true;
         }
         case 'r' : {
             // reverse the stack.
-            std::reverse(fish_resource_ptr_->stack_.back().begin(),
-                fish_resource_ptr_->stack_.back().end());
+            fish_resource_ptr_->stack_.reverse();
             return true;
         }
         case 'l' : {
-            ImplInt i = fish_resource_ptr_->stack_.back().size();
-            fish_resource_ptr_->stack_.back().push_back(static_cast<ImplInt>(i));
+            ImplInt i = static_cast<ImplInt>(fish_resource_ptr_->stack_.size());
+            fish_resource_ptr_->stack_.push_back(i);
             return true;
         }
         // Input/output
        case 'o' : {
-            if (fish_resource_ptr_->stack_.back().empty()) {
+            if (fish_resource_ptr_->stack_.empty()) {
                 throw stack_exception("call 'o', but stack is empty.");
             }
 
-            if (IsInt(fish_resource_ptr_->stack_.back().back())) {
-                ImplInt i = std::get<ImplInt>(fish_resource_ptr_->stack_.back().back());
+            if (IsInt(fish_resource_ptr_->stack_.back())) {
+                ImplInt i = std::get<ImplInt>(fish_resource_ptr_->stack_.pop_back());
                 std::cout << static_cast<char>(i);
             } else {
-                ImplFloat f = std::get<ImplFloat>(fish_resource_ptr_->stack_.back().back());
+                ImplFloat f = std::get<ImplFloat>(fish_resource_ptr_->stack_.pop_back());
                 std::cout << static_cast<char>(f);
             }
-            fish_resource_ptr_->stack_.back().pop_back();
+
             return true;
         }
         case 'n': {
-            if (fish_resource_ptr_->stack_.back().empty()) {
+            if (fish_resource_ptr_->stack_.empty()) {
                 throw stack_exception("call 'n', but stack is empty.");
             }
 
-            std::cout << ToIntIfPossible(fish_resource_ptr_->stack_.back().back());
-            fish_resource_ptr_->stack_.back().pop_back();
+            std::cout << ToIntIfPossible(fish_resource_ptr_->stack_.pop_back());
             return true;
         }
         case 'i': {
             char c;
 
             if (std::cin.get(c)) {
-                fish_resource_ptr_->stack_.back().push_back(static_cast<ImplInt>(c));
+                fish_resource_ptr_->stack_.push_back(static_cast<ImplInt>(c));
             } else {
-                fish_resource_ptr_->stack_.back().push_back(static_cast<ImplInt>(-1));
+                fish_resource_ptr_->stack_.push_back(static_cast<ImplInt>(-1));
             }
 
             return true;
         }
         // Reflection/miscellaneous
         case 'g' : {
-            if (fish_resource_ptr_->stack_.back().size() < 2) {
+            if (fish_resource_ptr_->stack_.size() < 2) {
                 throw stack_exception("call 'g', but stack size is less than 2.");
             }
 
-            const Number a = ToIntIfPossible(fish_resource_ptr_->stack_.back().back());
-            fish_resource_ptr_->stack_.back().pop_back();
-            const Number b = ToIntIfPossible(fish_resource_ptr_->stack_.back().back());
-            fish_resource_ptr_->stack_.back().pop_back();
-
-            const auto x = GetIntOr(b, -1);
-            const auto y = GetIntOr(a, -1);
+            const Number a = ToIntIfPossible(fish_resource_ptr_->stack_.pop_back());
+            const Number b = ToIntIfPossible(fish_resource_ptr_->stack_.pop_back());
+            const ImplInt x = GetIntOr(b, -1);
+            const ImplInt y = GetIntOr(a, -1);
 
             if (x < 0 || y < 0) {
                 throw invalid_argument_exception("Call 'g', but x or y is negative.");
             }
 
-            fish_resource_ptr_->stack_.back().push_back(fish_resource_ptr_->code_box_.GetChar(x, y));
+            fish_resource_ptr_->stack_.push_back(fish_resource_ptr_->code_box_.GetChar(x, y));
             return true;
         }
         case 'p' : {
-            if (fish_resource_ptr_->stack_.back().size() < 3) {
+            if (fish_resource_ptr_->stack_.size() < 3) {
                 throw stack_exception("call 'p', but stack size is less than 3.");
             }
 
-            const Number a = ToIntIfPossible(fish_resource_ptr_->stack_.back().back());
-            fish_resource_ptr_->stack_.back().pop_back();
-            const Number b = ToIntIfPossible(fish_resource_ptr_->stack_.back().back());
-            fish_resource_ptr_->stack_.back().pop_back();
-            const Number c = ToIntIfPossible(fish_resource_ptr_->stack_.back().back());
-            fish_resource_ptr_->stack_.back().pop_back();
+            const Number a = ToIntIfPossible(fish_resource_ptr_->stack_.pop_back());
+            const Number b = ToIntIfPossible(fish_resource_ptr_->stack_.pop_back());
+            const Number c = fish_resource_ptr_->stack_.pop_back();
 
             const ImplInt x = GetIntOr(c, -1);
             const ImplInt y = GetIntOr(b, -1);
@@ -262,58 +243,35 @@ bool InstructionHandler::Handle(const char ch) {
             return true;
         }
         case '&': {
-            if (fish_resource_ptr_->register_.has_value()) {
-                fish_resource_ptr_->stack_.back().push_back(fish_resource_ptr_->register_.value());
-                fish_resource_ptr_->register_ = std::nullopt;
+            if (fish_resource_ptr_->stack_.register_has_val()) {
+                fish_resource_ptr_->stack_.push_back(fish_resource_ptr_->stack_.pop_register());
             } else {
-                if (fish_resource_ptr_->stack_.back().empty()) {
+                if (fish_resource_ptr_->stack_.empty()) {
                     throw stack_exception("call '&', but stack is empty.");
                 }
 
-                fish_resource_ptr_->register_ = fish_resource_ptr_->stack_.back().back();
-                fish_resource_ptr_->stack_.back().pop_back();
+                fish_resource_ptr_->stack_.push_register(fish_resource_ptr_->stack_.pop_back());
             }
+
             return true;
         }
         case '[' : {
-            if (fish_resource_ptr_->stack_.back().empty()) {
+            if (fish_resource_ptr_->stack_.empty()) {
                 throw stack_exception("call '[', but stack is empty.");
             }
 
-            ImplInt i = GetIntOr(fish_resource_ptr_->stack_.back().back(), -1);
-            fish_resource_ptr_->stack_.back().pop_back();
+            ImplInt i = GetIntOr(fish_resource_ptr_->stack_.pop_back(), -1);
 
             if (i < 0) {
                 throw invalid_argument_exception("Call '[', but i is negative.");
             }
 
-            // スタックの後ろからi個分の要素を取り出して新しいスタックに積む.
-            std::deque<Number> s;
-            
-            for (ImplInt j = 0; j < i; ++j) {
-                if (fish_resource_ptr_->stack_.back().empty()) {
-                    throw stack_exception("call '[', but stack is empty.");
-                }
-
-                s.push_front(fish_resource_ptr_->stack_.back().back());
-                fish_resource_ptr_->stack_.back().pop_back();
-            }
-
-            fish_resource_ptr_->stack_.push_back(s);
+            fish_resource_ptr_->stack_.push_back_stack(i);
 
             return true;
         }
         case ']' : {
-            if (fish_resource_ptr_->stack_.size() == 1) {
-                throw stack_exception("call ']', but stack size is 1.");
-            }
-
-            auto s = fish_resource_ptr_->stack_.back();
-            fish_resource_ptr_->stack_.pop_back();
-            
-            for (const auto& n : s) {
-                fish_resource_ptr_->stack_.back().push_back(n);
-            }
+            fish_resource_ptr_->stack_.pop_back_stack();
             return true;
         }
         default: {
@@ -391,12 +349,11 @@ void InstructionHandler::Mirror(const char ch) {
 }
 
 void InstructionHandler::ConditionalTrampoline() {
-    if (fish_resource_ptr_->stack_.back().empty()) {
+    if (fish_resource_ptr_->stack_.empty()) {
         throw stack_exception("call '?', but stack is empty.");
     }
 
-    Number a = fish_resource_ptr_->stack_.back().back();
-    fish_resource_ptr_->stack_.back().pop_back();
+    Number a = fish_resource_ptr_->stack_.pop_back();
 
     if (IsInt(a)) {
         ImplInt i = std::get<ImplInt>(a);
@@ -412,14 +369,12 @@ void InstructionHandler::ConditionalTrampoline() {
 }
 
 void InstructionHandler::Jump() {
-    if (fish_resource_ptr_->stack_.back().empty()) {
+    if (fish_resource_ptr_->stack_.empty()) {
         throw stack_exception("call '.', but stack is empty.");
     }
 
-    Number a = ToIntIfPossible(fish_resource_ptr_->stack_.back().back());
-    fish_resource_ptr_->stack_.back().pop_back();
-    Number b = ToIntIfPossible(fish_resource_ptr_->stack_.back().back());
-    fish_resource_ptr_->stack_.back().pop_back();
+    Number a = ToIntIfPossible(fish_resource_ptr_->stack_.pop_back());
+    Number b = ToIntIfPossible(fish_resource_ptr_->stack_.pop_back());
 
     fish_resource_ptr_->x_ = GetIntOr(b, -1);
     fish_resource_ptr_->y_ = GetIntOr(a, -1);
@@ -433,35 +388,33 @@ void InstructionHandler::Jump() {
 }
 
 void InstructionHandler::ArithmeticOperators(const char op) {
-    if (fish_resource_ptr_->stack_.back().size() < 2) {
+    if (fish_resource_ptr_->stack_.size() < 2) {
         throw stack_exception("Call arithmetic operators, "
             "but stack size is less than 2.");
     }
 
-    const Number a = fish_resource_ptr_->stack_.back().back();
-    fish_resource_ptr_->stack_.back().pop_back();
-    const Number b = fish_resource_ptr_->stack_.back().back();
-    fish_resource_ptr_->stack_.back().pop_back();
+    const Number a = fish_resource_ptr_->stack_.pop_back();
+    const Number b = fish_resource_ptr_->stack_.pop_back();
 
     switch (op) {
         case '+': {
-            fish_resource_ptr_->stack_.back().push_back(a + b);
+            fish_resource_ptr_->stack_.push_back(a + b);
             break;
         }
         case '-': {
-            fish_resource_ptr_->stack_.back().push_back(b - a);
+            fish_resource_ptr_->stack_.push_back(b - a);
             break;
         }
         case '*': {
-            fish_resource_ptr_->stack_.back().push_back(a * b);
+            fish_resource_ptr_->stack_.push_back(a * b);
             break;
         }
         case ',': {
-            fish_resource_ptr_->stack_.back().push_back(b / a);
+            fish_resource_ptr_->stack_.push_back(b / a);
             break;
         }
         case '%': {
-            fish_resource_ptr_->stack_.back().push_back(b % a);
+            fish_resource_ptr_->stack_.push_back(b % a);
             break;
         }
         default: {
@@ -471,29 +424,27 @@ void InstructionHandler::ArithmeticOperators(const char op) {
 }
 
 void InstructionHandler::ComparisonOperator(const char op) {
-    if (fish_resource_ptr_->stack_.back().size() < 2) {
+    if (fish_resource_ptr_->stack_.size() < 2) {
         throw stack_exception("Call comparison operators, "
             "but stack size is less than 2.");
     }
 
-    const Number a = fish_resource_ptr_->stack_.back().back();
-    fish_resource_ptr_->stack_.back().pop_back();
-    const Number b = fish_resource_ptr_->stack_.back().back();
-    fish_resource_ptr_->stack_.back().pop_back();
+    const Number a = fish_resource_ptr_->stack_.pop_back();
+    const Number b = fish_resource_ptr_->stack_.pop_back();
 
     switch (op) {
         case '=' : {
-            fish_resource_ptr_->stack_.back().push_back(a == b ?
+            fish_resource_ptr_->stack_.push_back(a == b ?
                 static_cast<ImplInt>(1) : static_cast<ImplInt>(0));
             break;
         }
         case '(' : {
-            fish_resource_ptr_->stack_.back().push_back(a > b ?
+            fish_resource_ptr_->stack_.push_back(a > b ?
                 static_cast<ImplInt>(1) : static_cast<ImplInt>(0));
             break;
         }
         case ')' : {
-            fish_resource_ptr_->stack_.back().push_back(a < b ?
+            fish_resource_ptr_->stack_.push_back(a < b ?
                 static_cast<ImplInt>(1) : static_cast<ImplInt>(0));
             break;
         }

@@ -3,7 +3,7 @@
 #define FISHC_FISH_RESOURCE_H_
 
 #include "code_box.h"
-#include "type.h"
+#include "stack.h"
 
 namespace fishc {
 
@@ -16,13 +16,10 @@ struct FishResource final {
     };
 
     FishResource() = delete;
-    explicit FishResource(const std::string& code) : code_box_(code) {
-        stack_.push_back(std::deque<Number>());
-    }
+    explicit FishResource(const std::string& code) : code_box_(code) {}
 
     CodeBox code_box_;
     Stack stack_;
-    Register register_{std::nullopt};
     int x_{0}, y_{0};
     Direction direction_{Direction::kRight};
     bool skip_{false};

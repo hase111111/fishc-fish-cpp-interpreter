@@ -292,7 +292,6 @@ TEST_CASE("InstructionHandler") {
         }
 
         CHECK_EQ(fish_resource->code_box_, default_resource->code_box_);
-        CHECK_EQ(fish_resource->register_, default_resource->register_);
         CHECK_EQ(fish_resource->stack_, default_resource->stack_);
         CHECK_EQ(fish_resource->x_, default_resource->x_);
         CHECK_EQ(fish_resource->y_, default_resource->y_);
