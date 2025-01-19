@@ -2,6 +2,8 @@
 #include "stack.h"
 
 #include <algorithm>
+#include <cassert>
+#include <optional>
 
 #include "exception.h"
 
@@ -151,6 +153,22 @@ void Stack::reverse() {
     }
 }
 
+void Stack::swap2() {
+    if (stacks.empty()) {
+        if (default_stack.size() < 2) {
+            throw stack_exception("Stack size is less than 2");
+        }
+
+        std::swap(default_stack[default_stack.size() - 1], default_stack[default_stack.size() - 2]);
+    } else {
+        if (stacks.back().size() < 2) {
+            throw stack_exception("Stack size is less than 2");
+        }
+
+        std::swap(stacks.back()[stacks.back().size() - 1], stacks.back()[stacks.back().size() - 2]);
+    }
+}
+
 bool Stack::register_has_val() const {
     if (registers.empty()) {
         return default_register.has_value();
@@ -206,6 +224,11 @@ void Stack::push_back_stack(int num) {
     std::sort(new_stack.begin(), new_stack.end());
 
     stacks.push_back(new_stack);
+
+    // also push register
+    registers.push_back(Register(std::nullopt));
+
+    assert(registers.size() == stacks.size());
 }
 
 void Stack::pop_back_stack() {
@@ -220,6 +243,8 @@ void Stack::pop_back_stack() {
     } else {
         stacks.back().insert(stacks.back().end(), now_stack.begin(), now_stack.end());
     }
+
+    registers.pop_back();
 }
 
 }  // namespace fishc

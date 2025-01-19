@@ -30,6 +30,7 @@ void push_front(const Number& n);
 [[nodiscard]] bool empty() const;
 [[nodiscard]] size_t size() const;
 void reverse();
+void swap2();
 
 bool register_has_val() const;
 Number pop_register();

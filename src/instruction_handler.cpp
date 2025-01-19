@@ -22,6 +22,14 @@ bool InstructionHandler::Handle(const char ch) {
     using Dir = FishResource::Direction;
 
     switch (ch) {
+        case ';': {
+            // exit the program.
+            return false;
+        }
+        case ' ' :  case 0: {
+            // no operation.
+            return true;
+        }
         // Movement and execution
         case '>': {
             fish_resource_ptr_->direction_ = Dir::kRight;
@@ -109,14 +117,7 @@ bool InstructionHandler::Handle(const char ch) {
             return true;
         }
         case '$' : {
-            if (fish_resource_ptr_->stack_.size() < 2) {
-                throw stack_exception("call '$', but stack size is less than 2.");
-            }
-
-            const Number s = fish_resource_ptr_->stack_.pop_back();
-            const Number t = fish_resource_ptr_->stack_.pop_back();
-            fish_resource_ptr_->stack_.push_back(s);
-            fish_resource_ptr_->stack_.push_back(t);
+            fish_resource_ptr_->stack_.swap2();
             return true;
         }
         case '@' : {
@@ -232,14 +233,6 @@ bool InstructionHandler::Handle(const char ch) {
             }
 
             fish_resource_ptr_->code_box_.SetChar(x, y, a);
-            return true;
-        }
-        case ';': {
-            // exit the program.
-            return false;
-        }
-        case ' ' :  case 0: {
-            // no operation.
             return true;
         }
         case '&': {
