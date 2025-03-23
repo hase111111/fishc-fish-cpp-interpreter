@@ -77,8 +77,8 @@ def main() -> None:
         start = time.time()
 
         # run the fish code
-        # res = subprocess.run(['./build/fishc', fish_file, "-l", "100000000",],
-        #     input=input_str, check=True, capture_output=True, text=True)
+        res = subprocess.run(['./build/fishc', fish_file, "-l", "100000000", "-d"],
+            input=input_str, check=True, capture_output=True, text=True)
         # res = subprocess.run(['python3', 'bash/fish.py', fish_file],
         #     input=input_str, check=True, capture_output=True, text=True)
         # res = subprocess.run(['fishr', fish_file],
