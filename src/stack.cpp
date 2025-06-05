@@ -74,39 +74,23 @@ Number Stack::pop_front() {
 }
 
 Number Stack::back() const {
-    if (stacks.empty()) {
-        // get val from default stack
-        if (default_stack.empty()) {
-            throw stack_exception("Stack is empty");
-        }
+    const auto& stack = stacks.empty() ? default_stack : stacks.back();
 
-        return default_stack.back();
-    } else {
-        // get val from stack
-        if (stacks.back().empty()) {
-            throw stack_exception("Stack is empty");
-        }
-
-        return stacks.back().back();
+    if (stack.empty()) {
+        throw stack_exception("Stack is empty");
     }
+
+    return stack.back();
 }
 
 Number Stack::front() const {
-    if (stacks.empty()) {
-        // get val from default stack
-        if (default_stack.empty()) {
-            throw stack_exception("Stack is empty");
-        }
+    const auto& stack = stacks.empty() ? default_stack : stacks.back();
 
-        return default_stack.front();
-    } else {
-        // get val from stack
-        if (stacks.back().empty()) {
-            throw stack_exception("Stack is empty");
-        }
-
-        return stacks.back().front();
+    if (stack.empty()) {
+        throw stack_exception("Stack is empty");
     }
+
+    return stack.front();
 }
 
 void Stack::push_back(const Number& n) {
@@ -221,7 +205,7 @@ void Stack::push_back_stack(int num) {
         }
     }
 
-    std::sort(new_stack.begin(), new_stack.end());
+    std::reverse(new_stack.begin(), new_stack.end());
 
     stacks.push_back(new_stack);
 

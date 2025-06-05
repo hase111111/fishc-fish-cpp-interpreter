@@ -71,14 +71,41 @@ def main() -> None:
         except FileNotFoundError:
             input_str = ''
         output_file_name = fish_file_name_to_output_file_name(file_name)
-        output_str = read_file_to_str(f"{RESULT_FILE_PATH}/" + output_file_name)
+        output_str = ""
+        try:
+            output_str = read_file_to_str(f"{RESULT_FILE_PATH}/" + output_file_name)
+        except FileNotFoundError:
+            # run fish.py, and get the output
+            print('Warning: Output file not found for', file_name)
+            print('Running fish.py to get the output...')
+            try:
+                res = subprocess.run(['python3', 'bash/fish.py', fish_file],
+                    input=input_str, check=True, capture_output=True, text=True)
+                output_str = res.stdout
+
+                #  and save the output to the output file
+                with open(f"{RESULT_FILE_PATH}/" + output_file_name, 'w', encoding='utf-8') as f:
+                    f.write(output_str)
+                print('Output file created:', output_file_name)
+            except subprocess.CalledProcessError as e:
+                print('Error running fish.py for', file_name)
+                print('Error message:', e)
+                print('Skipping this test.')
+                continue
+            except Exception as e:
+                print('Unexpected error running fish.py for', file_name)
+                print('Error message:', e)
+                print('Skipping this test.')
+                continue
+            print('Output file not found, using output from fish.py:', output_file_name)
+            print('-' * 40)
 
         # calc time
         start = time.time()
 
         # run the fish code
-        # res = subprocess.run(['./build/fishc', fish_file, "-l", "100000000",],
-        #     input=input_str, check=True, capture_output=True, text=True)
+        res = subprocess.run(['./build/fishc', fish_file, "-l", "100000000",],
+            input=input_str, check=True, capture_output=True, text=True)
         # res = subprocess.run(['python3', 'bash/fish.py', fish_file],
         #     input=input_str, check=True, capture_output=True, text=True)
         # res = subprocess.run(['fishr', fish_file],
