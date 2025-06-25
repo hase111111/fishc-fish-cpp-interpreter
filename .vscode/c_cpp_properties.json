@@ -4,7 +4,7 @@
             "name": "Ubuntu",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/include"
+                "${workspaceFolder}/include/**"
             ],
             "compileCommands": "${workspaceFolder}/build/compile_commands.json"
         }
